@@ -1,0 +1,52 @@
+[
+    {
+        "id":  1,
+        "name":  "Frontend Squad",
+        "mission":  "Build usable Angular experiences for team evaluation workflows.",
+        "managerId":  1,
+        "healthScore":  86,
+        "deliveryScore":  84,
+        "engagementScore":  88,
+        "riskLevel":  "Low"
+    },
+    {
+        "id":  2,
+        "name":  "Backend Squad",
+        "mission":  "Provide simple, reliable APIs for workshop business scenarios.",
+        "managerId":  2,
+        "healthScore":  82,
+        "deliveryScore":  86,
+        "engagementScore":  80,
+        "riskLevel":  "Medium"
+    },
+    {
+        "id":  3,
+        "name":  "Platform Squad",
+        "mission":  "Support local-first engineering workflows and deployment readiness.",
+        "managerId":  3,
+        "healthScore":  89,
+        "deliveryScore":  87,
+        "engagementScore":  85,
+        "riskLevel":  "Low"
+    },
+    {
+        "id":  4,
+        "name":  "QA Squad",
+        "mission":  "Improve confidence through test planning and quality feedback.",
+        "managerId":  4,
+        "healthScore":  78,
+        "deliveryScore":  80,
+        "engagementScore":  77,
+        "riskLevel":  "Medium"
+    },
+    {
+        "id":  5,
+        "name":  "Delivery Squad",
+        "mission":  "Coordinate delivery plans, risks, and stakeholder visibility.",
+        "managerId":  5,
+        "healthScore":  84,
+        "deliveryScore":  82,
+        "engagementScore":  83,
+        "riskLevel":  "Low"
+    }
+]
