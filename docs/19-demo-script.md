@@ -9,7 +9,7 @@ Use this script for a practical workshop walkthrough. Recommended order: Manager
 3. Open `http://localhost:4200`.
 4. Login as Manager:
    - Email: `manager1@teampulse.demo`
-   - Password: `Manager@123`
+   - Password: `TeamPulse-Manager-2026!`
 5. Show the Dashboard:
    - Team totals.
    - Member totals.
@@ -46,7 +46,7 @@ Use this script for a practical workshop walkthrough. Recommended order: Manager
 
 1. Login as Team Member:
    - Email: `member1@teampulse.demo`
-   - Password: `Member@123`
+   - Password: `TeamPulse-Member-2026!`
 2. Show the member dashboard.
 3. Open Teams and Members to show limited/read-only behavior.
 4. Open own Member Profile.

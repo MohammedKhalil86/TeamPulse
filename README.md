@@ -69,15 +69,15 @@ Managers:
 
 | Email | Password |
 | --- | --- |
-| `manager1@teampulse.demo` | `Manager@123` |
-| `manager2@teampulse.demo` | `Manager@123` |
+| `manager1@teampulse.demo` | `TeamPulse-Manager-2026!` |
+| `manager2@teampulse.demo` | `TeamPulse-Manager-2026!` |
 
 Team Members:
 
 | Email | Password |
 | --- | --- |
-| `member1@teampulse.demo` | `Member@123` |
-| `member2@teampulse.demo` | `Member@123` |
+| `member1@teampulse.demo` | `TeamPulse-Member-2026!` |
+| `member2@teampulse.demo` | `TeamPulse-Member-2026!` |
 
 ## Main Pages
 
@@ -109,7 +109,16 @@ Start with:
 
 ## Deployment Note
 
-TeamPulse is local-first. Static frontend hosting options include GitHub Pages, Cloudflare Pages, Netlify, and Vercel. Backend hosting options include Render, Railway, Koyeb, Fly.io, and Azure App Service if available. Production deployment needs an updated frontend API URL and production CORS settings. Free hosting plans are not guaranteed forever.
+TeamPulse is local-first. Static frontend hosting options include GitHub Pages, Cloudflare Pages, Netlify, and Vercel. Backend hosting options include Render, Railway, Koyeb, Fly.io, and Azure App Service if available. Free hosting plans are not guaranteed forever.
+
+GitHub Pages build:
+
+```bash
+cd frontend
+npm run build:github-pages
+```
+
+The output is written to `frontend/dist/teampulse-frontend/browser` with `/TeamPulse/` as the base path, copied seed JSON assets, and a `404.html` fallback for clean Angular routes. See `docs/16-deployment-plan.md`.
 
 ## Recommended Demo Order
 

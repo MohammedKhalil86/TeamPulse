@@ -7,6 +7,7 @@ frontend/src/app/
   core/
     api/
     auth/
+    data/
     guards/
     interceptors/
     layout/
@@ -37,6 +38,7 @@ frontend/src/app/
 | --- | --- |
 | `core/api` | Typed HttpClient services for backend endpoints |
 | `core/auth` | Fake login/logout and current session state |
+| `core/data` | Static seed-data loader and localStorage-backed data store for static hosting |
 | `core/guards` | Auth and role route guards |
 | `core/interceptors` | HTTP loading interceptor and loading service |
 | `core/layout` | Authenticated app shell, sidebar, topbar, page help mapping |
@@ -50,3 +52,12 @@ frontend/src/app/
 | `features/*` | Route-level business and learning pages |
 
 Angular route components are lazy-loaded from `app.routes.ts`. Shared UI stays generic; business logic stays inside feature pages and core API services.
+
+## Data Setup Switch
+
+Existing services in `core/api` keep their HttpClient calls visible and retain their public method shapes. They read the `DATA_MODE` token from `api.config.ts`:
+
+- `api`: call the ASP.NET Core Minimal API using `HttpClient`.
+- `static`: delegate to `StaticDataStore`, which loads `assets/seed-data/*.json` and persists create/edit/delete changes in localStorage.
+
+Production builds copy root `shared/seed-data/*.json` into `assets/seed-data/` through `angular.json`. No normal business page shows the active setup.

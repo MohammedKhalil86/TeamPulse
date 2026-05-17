@@ -1,5 +1,34 @@
 # Change Log
 
+## 2026-05-17 - GitHub Pages build preparation
+
+- Added an Angular `github-pages` build configuration with `baseHref` set to `/TeamPulse/` for the repository path `https://github.com/MohammedKhalil86/TeamPulse`.
+- Added `build:github-pages` and `preview:github-pages` npm scripts without changing Angular package versions or adding dependencies.
+- Added `frontend/scripts/create-github-pages-404.mjs`, which copies `index.html` to `404.html` and creates `.nojekyll` for GitHub Pages SPA fallback support.
+- Kept path-based Angular routing; hash routing was not introduced.
+- Verified the GitHub Pages build output includes `index.html`, `404.html`, `.nojekyll`, and copied static seed JSON assets under `assets/seed-data/`.
+- Updated deployment documentation and README build notes.
+
+## 2026-05-17 - Static frontend data setup
+
+- Added Angular environment data setup configuration with local development using `dataMode: 'api'` and production/static builds using `dataMode: 'static'`.
+- Kept the existing HttpClient REST services and added static delegation branches behind the same service method shapes.
+- Added `StaticDataStore`, which loads `assets/seed-data/*.json`, initializes namespaced `teampulse.v2.*` localStorage keys, tracks `seedVersion`, and persists create/edit/delete actions in the browser.
+- Configured Angular build assets to copy root `shared/seed-data/*.json` into the frontend build output under `assets/seed-data/`.
+- Updated fake auth so both setups use the same seeded users and stronger demo passwords, with the session stored as `teampulse.v2.session`.
+- Kept business UI wording unchanged; setup differences are documented only in docs.
+- Verified `npm run build`, `npm run build -- --configuration development`, and `dotnet build`.
+
+## 2026-05-17 - Shared seed data foundation
+
+- Added root shared seed data files under `shared/seed-data/` for users, teams, members, evaluations, goals, feedback, notes, and seed metadata.
+- Preserved the seeded workshop counts: 65 users, 5 managers, 60 team member users, 5 teams, 60 member profiles, 60 evaluations, 70 goals, 60 feedback records, and 30 one-to-one notes.
+- Updated manager demo passwords to `TeamPulse-Manager-2026!` and team member demo passwords to `TeamPulse-Member-2026!`.
+- Replaced the backend C# seed generation body with `SeedDataLoader`, which loads the shared JSON files, validates counts and relationships, and keeps the existing singleton in-memory `TeamPulseDataStore` behavior.
+- Kept Swagger, CORS, Minimal API endpoints, Angular `HttpClient` usage, Angular package versions, and UI behavior unchanged.
+- Updated seeded data, data model, auth/roles, and README credential documentation.
+- Verified `dotnet build`, API startup, new manager/member logins, seeded counts, relationship checks, and Swagger endpoint exposure.
+
 ## 2026-05-03 — Post-review fixes
 
 Applied all fixes from the comprehensive project review.

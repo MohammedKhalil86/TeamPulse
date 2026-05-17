@@ -190,8 +190,8 @@ export class LoginPageComponent {
   protected readonly busy = signal(false);
   protected readonly error = signal<string | null>(null);
   protected readonly roleOptions: RoleOption[] = [
-    { label: 'Manager', value: 'Manager', email: 'manager1@teampulse.demo', password: 'Manager@123' },
-    { label: 'Team Member', value: 'TeamMember', email: 'member1@teampulse.demo', password: 'Member@123' }
+    { label: 'Manager', value: 'Manager', email: 'manager1@teampulse.demo', password: 'TeamPulse-Manager-2026!' },
+    { label: 'Team Member', value: 'TeamMember', email: 'member1@teampulse.demo', password: 'TeamPulse-Member-2026!' }
   ];
 
   protected readonly form = this.fb.nonNullable.group({

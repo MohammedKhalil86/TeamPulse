@@ -27,12 +27,39 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "*.json",
+                "input": "../shared/seed-data",
+                "output": "assets/seed-data"
               }
             ],
             "styles": ["src/styles.scss"]
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.production.ts"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "750kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "github-pages": {
+              "baseHref": "/TeamPulse/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -66,6 +93,9 @@
           "configurations": {
             "production": {
               "buildTarget": "teampulse-frontend:build:production"
+            },
+            "github-pages": {
+              "buildTarget": "teampulse-frontend:build:github-pages"
             },
             "development": {
               "buildTarget": "teampulse-frontend:build:development"

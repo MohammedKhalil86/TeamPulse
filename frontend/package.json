@@ -6,6 +6,8 @@
         "ng": "ng",
         "start": "ng serve",
         "build": "ng build",
+        "build:github-pages": "ng build --configuration github-pages && node scripts/create-github-pages-404.mjs",
+        "preview:github-pages": "ng serve --configuration github-pages --port 4300",
         "watch": "ng build --watch --configuration development",
         "test": "ng test"
     },

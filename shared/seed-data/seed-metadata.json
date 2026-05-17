@@ -1,0 +1,16 @@
+{
+    "seedVersion":  "2.0.0",
+    "generatedAt":  "2026-05-17T00:00:00+00:00",
+    "source":  "TeamPulse v2 shared seed data exported from backend TeamPulse.Api/Data/SeedData.cs deterministic seed formula.",
+    "counts":  {
+                   "users":  65,
+                   "managers":  5,
+                   "teamMembers":  60,
+                   "teams":  5,
+                   "members":  60,
+                   "evaluations":  60,
+                   "goals":  70,
+                   "feedback":  60,
+                   "notes":  30
+               }
+}

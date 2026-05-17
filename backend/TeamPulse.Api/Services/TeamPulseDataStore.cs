@@ -14,9 +14,9 @@ public sealed class TeamPulseDataStore
     private readonly List<Feedback> _feedback;
     private readonly List<OneToOneNote> _notes;
 
-    public TeamPulseDataStore()
+    public TeamPulseDataStore(IHostEnvironment environment)
     {
-        var seed = SeedData.Create();
+        var seed = SeedData.Create(environment.ContentRootPath);
         _users = seed.Users;
         _teams = seed.Teams;
         _members = seed.Members;

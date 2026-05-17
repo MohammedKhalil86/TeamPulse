@@ -1,5 +1,7 @@
 export const environment = {
   production: true,
-  // Change this before deploying the frontend.
+  dataMode: 'static',
+  seedDataBaseUrl: 'assets/seed-data',
+  // Kept for local/API builds and learner visibility.
   apiBaseUrl: 'http://localhost:5001/api'
-};
+} as const;

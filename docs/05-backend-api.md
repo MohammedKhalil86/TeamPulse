@@ -58,7 +58,7 @@ Login request:
 ```json
 {
   "email": "manager1@teampulse.demo",
-  "password": "Manager@123"
+  "password": "TeamPulse-Manager-2026!"
 }
 ```
 
