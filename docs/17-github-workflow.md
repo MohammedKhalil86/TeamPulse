@@ -7,7 +7,7 @@ TeamPulse can be initialized as a normal Git repository from the project root.
 ```bash
 git init
 git add .
-git commit -m "Initialize TeamPulse workshop foundation"
+git commit -m "Initialize TeamPulse v2 foundation"
 ```
 
 ## Connect Remote
@@ -20,7 +20,7 @@ git push -u origin main
 
 ## Branch Guidance
 
-Use short feature branches for workshop phases:
+Use short feature branches for product or learning phases:
 
 ```bash
 git checkout -b feature/dashboard
@@ -37,8 +37,8 @@ git checkout -b docs/traceability
 - `Implement dashboard feature`
 - `Implement teams and members features`
 - `Implement evaluations feedback and goals`
-- `Implement Angular Lab`
-- `Harden workshop documentation`
+- `Implement Learning Lab`
+- `Harden documentation source of truth`
 
 ## Pull Request Notes
 

@@ -1,28 +1,43 @@
 # TeamPulse
 
-TeamPulse helps engineering managers and team members track goals, feedback, evaluations, skills, and team health in a simple visual workspace. The repository also supports Angular learning through docs and the in-app Learning Lab.
+TeamPulse helps engineering managers and team members understand team health, track goals, review feedback, follow evaluations, and keep delivery signals visible in one simple workspace.
+
+TeamPulse v2 is both a product-shaped Angular application and a learning project. The normal app UI is business-facing; technical explanations live in the docs, Learning Lab, MCP Servers page, and Run Locally page.
+
+- GitHub repository: https://github.com/MohammedKhalil86/TeamPulse
+- License: MIT, see [LICENSE](LICENSE)
+
+> TeamPulse uses sample workspace data. Do not enter real employee or company information.
+
+## Requirements
+
+- Node.js LTS supported by Angular 21. The project was prepared with Node.js 24 LTS; Node.js 22 LTS is also suitable for Angular 21.
+- npm.
+- Angular CLI is optional. Use the project scripts from `frontend/package.json`; installing `@angular/cli@21.2.9` globally is only a convenience.
+- .NET SDK compatible with the `net10.0` backend project for the Local API setup.
+
+Angular packages are pinned in `frontend/package.json`. Do not change Angular package versions unless that is a deliberate project step.
 
 ## Project Structure
 
 ```text
 TeamPulse/
-  frontend/              Angular 21.2.9 standalone application
   backend/
-    TeamPulse.Api/       ASP.NET Core Minimal API
-  docs/                  Workshop, architecture, and traceability docs
+    TeamPulse.Api/       ASP.NET Core Minimal API for local development
+  frontend/              Angular 21 standalone application
+  shared/
+    seed-data/           Shared JSON seed data used by both setups
+  docs/                  Product, architecture, learning, and workflow docs
+  LICENSE                MIT license
   README.md
+  TeamPulse.sln
 ```
 
-## Requirements
+## Local API Setup
 
-- Node.js 22 LTS or newer supported by Angular 21 (Node.js 24 LTS was used during this project setup).
-- npm 10 or newer (npm 11 was used during this project setup).
-- Angular CLI 21.2.9 (`npm install -g @angular/cli@21.2.9`).
-- .NET SDK 10.0 or newer compatible SDK for the `net10.0` backend project.
+Use this setup for normal local development and guided coding. Angular calls the ASP.NET Core Minimal API through the existing `HttpClient` services.
 
-Angular packages are pinned to exact version `21.2.9`. Do not upgrade them unless explicitly requested.
-
-## Run Backend
+Run the backend:
 
 ```bash
 cd backend/TeamPulse.Api
@@ -36,7 +51,7 @@ Backend URLs:
 - Swagger: `http://localhost:5001/swagger`
 - Health: `http://localhost:5001/health`
 
-## Run Frontend
+Run the frontend:
 
 ```bash
 cd frontend
@@ -44,23 +59,54 @@ npm install
 npm start
 ```
 
-Frontend URL:
+Open:
 
 ```text
 http://localhost:4200
 ```
 
-The frontend API base URL is configured in:
-
-```text
-frontend/src/environments/environment.ts
-frontend/src/environments/environment.production.ts
-```
-
-Local default:
+Local development configuration lives in `frontend/src/environments/environment.ts` and uses:
 
 ```text
 http://localhost:5001/api
+```
+
+## GitHub Pages Setup
+
+The GitHub Pages setup publishes the Angular frontend as static files at:
+
+```text
+https://mohammedkhalil86.github.io/TeamPulse/
+```
+
+It uses the same shared seed data from `shared/seed-data/`, copied into the frontend build output as `assets/seed-data/*.json`. On first load, the browser initializes namespaced `localStorage` records. Create, edit, and delete actions persist in that browser until site data is cleared or the seed version changes.
+
+Build for GitHub Pages:
+
+```bash
+cd frontend
+npm run build:github-pages
+```
+
+Output folder:
+
+```text
+frontend/dist/teampulse-frontend/browser
+```
+
+The GitHub Pages build sets the base path to `/TeamPulse/`, keeps clean Angular routes, copies seed JSON assets, creates `.nojekyll`, and copies `index.html` to `404.html` so direct route refreshes can fall back to the Angular app.
+
+Optional local preview:
+
+```bash
+cd frontend
+npm run preview:github-pages -- --host 127.0.0.1
+```
+
+Open:
+
+```text
+http://127.0.0.1:4300/TeamPulse
 ```
 
 ## Demo Credentials
@@ -72,64 +118,71 @@ Managers:
 | `manager1@teampulse.demo` | `TeamPulse-Manager-2026!` |
 | `manager2@teampulse.demo` | `TeamPulse-Manager-2026!` |
 
-Team Members:
+Team members:
 
 | Email | Password |
 | --- | --- |
 | `member1@teampulse.demo` | `TeamPulse-Member-2026!` |
 | `member2@teampulse.demo` | `TeamPulse-Member-2026!` |
 
-## Main Pages
+## Main App Pages
 
-- `/login`: product sign-in with sample credentials.
-- `/dashboard`: role-aware dashboard.
-- `/teams` and `/teams/:id`: teams list and detail.
+- `/login`: product sign-in with sample credentials and sample-data notice.
+- `/dashboard`: role-aware manager or team member overview.
+- `/teams` and `/teams/:id`: teams list and team detail.
 - `/members` and `/members/:id`: member directory and profile.
 - `/evaluations`: evaluation management and personal evaluations.
 - `/feedback`: feedback feed and creation.
 - `/goals`: goal tracking and management.
-- `/learning/angular` and `/learning/angular/:featureId`: Angular concept explorer (redirects from `/angular-lab`).
-- `/learning/mcp-servers`: MCP Servers — five development-time AI tools explained.
-- `/learning/run-locally`: Run Locally — local API setup, GitHub Pages build, troubleshooting.
+- `/how-teampulse-works`: role-aware business guide.
 
-## Backend Scope
+## Learning Pages
 
-The backend uses in-memory sample data only. There is no database, Entity Framework, JWT, ASP.NET Identity, password hashing, or real authentication server.
+- `/learning/angular`: Angular concept explorer with searchable filters and real code walkthroughs.
+- `/learning/angular/:featureId`: Angular concept detail page.
+- `/learning/mcp-servers`: development-time MCP server guide for AI-assisted coding workflows.
+- `/learning/run-locally`: local setup, GitHub Pages setup, and troubleshooting guide.
+- `/angular-lab` and `/angular-lab/:featureId`: old route redirects kept for compatibility.
+
+## Data And Backend Scope
+
+TeamPulse uses sample data only. The backend keeps data in memory and reloads from shared JSON seed files when it starts. The GitHub Pages setup initializes browser storage from the same JSON files.
+
+The project intentionally does not include a production database, Entity Framework, ASP.NET Identity, JWT authentication, password hashing, or runtime AI features.
 
 ## Documentation Map
 
-Start with:
+Start here:
 
-- `docs/00-project-overview.md`
-- `docs/03-architecture.md`
-- `docs/04-frontend-structure.md`
-- `docs/05-backend-api.md`
-- `docs/10-angular-feature-to-page-map.md`
-- `docs/11-page-specifications.md`
-- `docs/13-learning-lab.md`
-- `docs/19-demo-script.md`
+- [Project Overview](docs/00-project-overview.md)
+- [Business Scope](docs/01-business-scope.md)
+- [Architecture](docs/03-architecture.md)
+- [Frontend Structure](docs/04-frontend-structure.md)
+- [Backend API](docs/05-backend-api.md)
+- [Seeded Data Plan](docs/08-seeded-data-plan.md)
+- [Learning Lab](docs/13-learning-lab.md)
+- [Deployment Plan](docs/16-deployment-plan.md)
+- [Demo Script](docs/19-demo-script.md)
 
-## Deployment Note
+## Common Troubleshooting
 
-TeamPulse is local-first. Static frontend hosting options include GitHub Pages, Cloudflare Pages, Netlify, and Vercel. Backend hosting options include Render, Railway, Koyeb, Fly.io, and Azure App Service if available. Free hosting plans are not guaranteed forever.
+If `npm install` fails, confirm your Node.js and npm versions first, then remove `frontend/node_modules` and try again.
 
-GitHub Pages build:
+If the frontend cannot reach the backend in the Local API setup, confirm `dotnet run` is active in `backend/TeamPulse.Api`, then check `http://localhost:5001/health`.
 
-```bash
-cd frontend
-npm run build:github-pages
-```
+If login fails, use the exact seeded email and password from this README. The sample passwords are case-sensitive.
 
-The output is written to `frontend/dist/teampulse-frontend/browser` with `/TeamPulse/` as the base path, copied seed JSON assets, and a `404.html` fallback for clean Angular routes. See `docs/16-deployment-plan.md`.
+If GitHub Pages shows a blank page, confirm the build used `npm run build:github-pages` so the base path is `/TeamPulse/`.
 
-## Recommended Demo Order
+If a deep GitHub Pages route refresh returns a 404, confirm `404.html` exists beside `index.html` in `frontend/dist/teampulse-frontend/browser`.
 
-1. Login as `manager1@teampulse.demo`.
-2. Show Dashboard, Teams, Members, Member Profile, Evaluations, Goals, theme switch, floating help, and Angular Lab.
-3. Logout.
-4. Login as `member1@teampulse.demo`.
-5. Show the personal dashboard and restricted/limited views.
+If GitHub Pages data looks stale, clear site data for the browser tab or change the seed version in `shared/seed-data/seed-metadata.json` as part of an intentional seed update.
 
-## GitHub Note
+## Contribution Notes
 
-The project can be initialized with Git from the root folder. See `docs/17-github-workflow.md` for branch and commit guidance.
+- Keep the backend and Local API setup intact.
+- Keep Angular `HttpClient` services visible for learners.
+- Keep GitHub Pages setup aligned with shared seed data.
+- Keep normal business UI free of setup labels and implementation jargon.
+- Update docs and `docs/18-change-log.md` with each meaningful change.
+- Run the relevant build command when app or backend files change.

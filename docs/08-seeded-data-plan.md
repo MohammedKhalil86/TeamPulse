@@ -44,7 +44,7 @@ shared/seed-data/
 
 | Data | Purpose |
 | --- | --- |
-| Users | Fake login and role identity |
+| Users | Sample login and role identity |
 | Teams | Team dashboard, team list, details, filters |
 | Member profiles | Member directory, paging, sorting, filtering |
 | Evaluations | Evaluation page and dashboard scoring |
@@ -78,4 +78,4 @@ Startup fails with a clear error if a JSON file is missing, malformed, has count
 - `teampulse.v2.notes`
 - `teampulse.v2.session`
 
-This lets the local API setup and GitHub Pages/static setup share the same source seed data while keeping the REST API implementation in the codebase.
+This lets the Local API setup and GitHub Pages setup share the same source seed data while keeping the REST API implementation in the codebase.

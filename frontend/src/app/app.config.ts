@@ -12,7 +12,11 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
+    // Learning Lab: withComponentInputBinding()
+    // Route parameters such as /learning/angular/:featureId can flow directly into input() properties.
     provideRouter(routes, withComponentInputBinding()),
+    // Learning Lab: HttpClient + interceptors
+    // withInterceptors() registers cross-cutting HTTP behavior without changing each API service.
     provideHttpClient(withFetch(), withInterceptors([httpLoadingInterceptor])),
     MessageService,
     provideAnimations(),

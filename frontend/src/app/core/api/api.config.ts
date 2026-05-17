@@ -3,6 +3,8 @@ import { environment } from '../../../environments/environment';
 
 export type DataMode = 'api' | 'static';
 
+// Learning Lab: Injection tokens
+// Environment values become injectable dependencies, which keeps services testable and mode-aware.
 export const DATA_MODE = new InjectionToken<DataMode>('DATA_MODE', {
   providedIn: 'root',
   factory: () => environment.dataMode

@@ -1,6 +1,6 @@
 # Demo Script
 
-Use this script for a practical workshop walkthrough. Recommended order: Manager flow first, then Team Member flow, then a short code walkthrough using Learning Lab / Angular.
+Use this script for a practical TeamPulse walkthrough. Recommended order: Manager flow first, then Team Member flow, then a short code walkthrough using Learning Lab / Angular.
 
 ## Manager Flow
 
@@ -39,7 +39,7 @@ Use this script for a practical workshop walkthrough. Recommended order: Manager
    - Search for a feature.
    - Open a detail page.
    - Follow links back to real app pages.
-14. Open Swagger at `http://localhost:5001/swagger` to show the Minimal API contract.
+14. Open Swagger at `http://localhost:5001/swagger` to show the Local API setup contract.
 15. Logout.
 
 ## Team Member Flow
@@ -54,4 +54,4 @@ Use this script for a practical workshop walkthrough. Recommended order: Manager
 6. Show Learning Lab is still available.
 7. Logout.
 
-The demo should emphasize that role restrictions are frontend workshop behavior, not production security.
+The demo should emphasize that role restrictions are learning/demo behavior, not production security.

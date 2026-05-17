@@ -7,6 +7,7 @@ import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { HelpService } from '../../../core/help/help.service';
 import { HelpFeatureRef, LEVEL_ORDER, LearnerLevel } from '../../../core/help/help.data';
+import { CodeWalkthrough } from '../../../features/learning/code-walkthroughs.data';
 
 @Component({
   selector: 'tp-floating-help',
@@ -129,21 +130,30 @@ import { HelpFeatureRef, LEVEL_ORDER, LearnerLevel } from '../../../core/help/he
                     <div class="snippet-placeholder">
                       <p-tag value="No snippet at this level" severity="secondary" />
                       <p>
-                        No code snippets are configured for the
+                        No commented code walkthroughs are configured for the
                         <strong>{{ learnerLevel() }}</strong> level on this page yet.
                         Open <a routerLink="/learning/angular">Learning Lab → Angular</a>
                         for detailed code examples with diagrams.
                       </p>
                     </div>
                   } @else {
-                    @for (snippet of filteredSnippets(); track snippet.label) {
+                    @for (walkthrough of filteredWalkthroughs(); track walkthrough.id) {
+                      <div class="snippet-block walkthrough-block">
+                        <div class="snippet-header">
+                          <span class="snippet-label">{{ walkthrough.title }}</span>
+                          <p-tag [value]="walkthrough.language" severity="secondary" />
+                        </div>
+                        <span class="snippet-path">{{ walkthrough.filePath }}</span>
+                        <pre><code>@for (line of codeLines(walkthrough); track line.number) {
+<span class="code-line" [class.highlight]="line.highlighted"><span class="line-number">{{ line.number }}</span><span class="line-text">{{ line.text }}</span></span>
+}</code></pre>
+                      </div>
+                    }
+                    @for (snippet of filteredLegacySnippets(); track snippet.label) {
                       <div class="snippet-block">
                         <div class="snippet-header">
                           <span class="snippet-label">{{ snippet.label }}</span>
-                          <p-tag
-                            [value]="snippet.minLevel"
-                            [severity]="levelSeverity(snippet.minLevel)"
-                          />
+                          <p-tag [value]="snippet.minLevel" [severity]="levelSeverity(snippet.minLevel)" />
                         </div>
                         <pre><code>{{ snippet.code }}</code></pre>
                       </div>
@@ -387,6 +397,12 @@ import { HelpFeatureRef, LEVEL_ORDER, LearnerLevel } from '../../../core/help/he
         color: var(--tp-text);
       }
 
+      .snippet-path {
+        color: var(--tp-muted);
+        font-family: var(--tp-font-code);
+        font-size: 0.78rem;
+      }
+
       pre {
         overflow: auto;
         border: 2px solid var(--tp-ink);
@@ -399,6 +415,31 @@ import { HelpFeatureRef, LEVEL_ORDER, LearnerLevel } from '../../../core/help/he
         padding: 1rem;
         white-space: pre-wrap;
         word-break: break-word;
+      }
+
+      .walkthrough-block pre {
+        padding: 0.35rem 0;
+      }
+
+      .code-line {
+        display: grid;
+        grid-template-columns: 3rem minmax(0, 1fr);
+        gap: 0.75rem;
+        padding: 0 1rem;
+      }
+
+      .code-line.highlight {
+        background: color-mix(in srgb, var(--tp-warning) 18%, transparent);
+      }
+
+      .line-number {
+        color: #9aa6b2;
+        text-align: right;
+        user-select: none;
+      }
+
+      .line-text {
+        white-space: pre-wrap;
       }
 
       /* Diagram tab */
@@ -440,6 +481,7 @@ import { HelpFeatureRef, LEVEL_ORDER, LearnerLevel } from '../../../core/help/he
 export class FloatingHelpComponent {
   protected readonly help = inject(HelpService);
   protected readonly entry = this.help.currentEntry;
+  protected readonly walkthroughs = this.help.currentWalkthroughs;
 
   protected readonly learnerLevel = signal<LearnerLevel>('Beginner');
   protected readonly visible = signal(false);
@@ -459,12 +501,16 @@ export class FloatingHelpComponent {
     return entry.angularFeatures.filter((f) => LEVEL_ORDER[f.minLevel] <= maxOrder);
   });
 
-  protected readonly filteredSnippets = computed(() => {
+  protected readonly filteredWalkthroughs = computed(() => this.walkthroughs());
+
+  protected readonly filteredLegacySnippets = computed(() => {
     const entry = this.entry();
     if (!entry) return [];
     const maxOrder = LEVEL_ORDER[this.learnerLevel()];
     return entry.codeSnippets.filter((s) => LEVEL_ORDER[s.minLevel] <= maxOrder);
   });
+
+  protected readonly filteredSnippets = computed(() => [...this.filteredWalkthroughs(), ...this.filteredLegacySnippets()]);
 
   protected levelSeverity(level: LearnerLevel): 'success' | 'info' | 'warn' {
     if (level === 'Beginner') return 'success';
@@ -477,5 +523,14 @@ export class FloatingHelpComponent {
       .split('-')
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(' ');
+  }
+
+  protected codeLines(walkthrough: CodeWalkthrough): Array<{ number: number; text: string; highlighted: boolean }> {
+    const highlighted = new Set(walkthrough.highlightedLines ?? []);
+    return walkthrough.code.split('\n').map((text, index) => ({
+      number: index + 1,
+      text,
+      highlighted: highlighted.has(index + 1)
+    }));
   }
 }

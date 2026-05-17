@@ -22,7 +22,7 @@ TeamPulse represents a lightweight engineering team management platform. The bus
 - Role-aware business guide: How TeamPulse Works.
 - Theme switching.
 - Floating page help.
-- Learning Lab with Angular learning, MCP Servers placeholder, and Run Locally placeholder.
+- Learning Lab with Angular learning, MCP Servers guidance, and Run Locally guidance.
 
 ## How TeamPulse Works Guide
 
@@ -58,4 +58,4 @@ The guide includes the sample-data notice used by public-facing TeamPulse screen
 - Runtime AI generation or AI summaries.
 - Multi-language UI.
 
-The fake role model is only a workshop teaching device. It demonstrates role-based UI and route guards without adding production security concerns.
+The sample role model demonstrates role-based UI and route guards without claiming to provide production security.

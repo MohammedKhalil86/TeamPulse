@@ -1,6 +1,6 @@
 # Auth and Roles
 
-TeamPulse uses fake authentication for workshop purposes. There is no JWT, no ASP.NET Identity, no password hashing, and no real authentication server.
+TeamPulse uses sample authentication for product demos and learning flows. There is no JWT, no ASP.NET Identity, no password hashing, and no real authentication server.
 
 ## Demo Credentials
 
@@ -20,7 +20,7 @@ Team Members:
 
 All seeded manager users use `TeamPulse-Manager-2026!`. All seeded team member users use `TeamPulse-Member-2026!`. Generic demo fallback users, if added later, should use `TeamPulse-Demo-2026!`.
 
-## Fake Login Flow
+## Sample Login Flow
 
 Local API setup:
 
@@ -31,7 +31,7 @@ Local API setup:
 5. Guards and layout navigation read the current session.
 6. Logout calls `POST /api/auth/logout` and clears the session key.
 
-Static hosting setup:
+GitHub Pages setup:
 
 1. The login page calls the same `AuthService.login(...)` method.
 2. `StaticDataStore` initializes localStorage from `assets/seed-data/users.json` if needed.

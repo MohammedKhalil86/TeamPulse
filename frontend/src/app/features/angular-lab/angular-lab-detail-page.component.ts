@@ -9,6 +9,7 @@ import { TagModule } from 'primeng/tag';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { SectionCardComponent } from '../../shared/components/section-card/section-card.component';
+import { CodeWalkthrough, getCodeWalkthroughs } from '../learning/code-walkthroughs.data';
 import { ANGULAR_LAB_FEATURES, findLabFeature, LabDifficulty, LabStatus } from './angular-lab.data';
 
 @Component({
@@ -68,7 +69,7 @@ import { ANGULAR_LAB_FEATURES, findLabFeature, LabDifficulty, LabStatus } from '
           </div>
         </tp-section-card>
 
-        <tp-section-card title="Diagram" subtitle="A simple mental model for the workshop.">
+        <tp-section-card title="Diagram" subtitle="A simple mental model for learners.">
           <pre>{{ feature.diagram }}</pre>
         </tp-section-card>
       </section>
@@ -133,6 +134,24 @@ import { ANGULAR_LAB_FEATURES, findLabFeature, LabDifficulty, LabStatus } from '
           </p-tabpanel>
 
           <p-tabpanel value="code">
+            @if (walkthroughs().length) {
+              <div class="walkthrough-list">
+                @for (walkthrough of walkthroughs(); track walkthrough.id) {
+                  <article class="walkthrough-card">
+                    <header>
+                      <div>
+                        <h3>{{ walkthrough.title }}</h3>
+                        <span>{{ walkthrough.filePath }}</span>
+                      </div>
+                      <p-tag [value]="walkthrough.language" severity="secondary" />
+                    </header>
+                    <pre class="code-walkthrough"><code>@for (line of codeLines(walkthrough); track line.number) {
+<span class="code-line" [class.highlight]="line.highlighted"><span class="line-number">{{ line.number }}</span><span class="line-text">{{ line.text }}</span></span>
+}</code></pre>
+                  </article>
+                }
+              </div>
+            }
             <p-panel header="Project snippet">
               <pre><code>{{ feature.snippet }}</code></pre>
             </p-panel>
@@ -202,6 +221,61 @@ import { ANGULAR_LAB_FEATURES, findLabFeature, LabDifficulty, LabStatus } from '
         white-space: pre-wrap;
       }
 
+      .walkthrough-list {
+        display: grid;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .walkthrough-card {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .walkthrough-card header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .walkthrough-card h3 {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .walkthrough-card header span {
+        color: var(--tp-muted);
+        font-family: var(--tp-font-code);
+        font-size: 0.82rem;
+      }
+
+      .code-walkthrough {
+        padding: 0.35rem 0;
+      }
+
+      .code-line {
+        display: grid;
+        grid-template-columns: 3rem minmax(0, 1fr);
+        gap: 0.75rem;
+        padding: 0 1rem;
+      }
+
+      .code-line.highlight {
+        background: color-mix(in srgb, var(--tp-warning) 18%, transparent);
+      }
+
+      .line-number {
+        color: #9aa6b2;
+        text-align: right;
+        user-select: none;
+      }
+
+      .line-text {
+        white-space: pre-wrap;
+      }
+
       p {
         color: var(--tp-muted);
         line-height: 1.65;
@@ -229,9 +303,12 @@ import { ANGULAR_LAB_FEATURES, findLabFeature, LabDifficulty, LabStatus } from '
   ]
 })
 export class AngularLabDetailPageComponent {
+  // Learning Lab: input() API + withComponentInputBinding()
+  // The featureId route parameter is assigned to this signal input by the router.
   readonly featureId = input<string>('');
   protected readonly features = ANGULAR_LAB_FEATURES;
   protected readonly feature = computed(() => findLabFeature(this.featureId() || null));
+  protected readonly walkthroughs = computed(() => getCodeWalkthroughs(this.feature()?.codeWalkthroughIds ?? []));
 
   protected difficultySeverity(difficulty: LabDifficulty): 'success' | 'warn' | 'danger' | 'info' {
     if (difficulty === 'Beginner') {
@@ -251,5 +328,14 @@ export class AngularLabDetailPageComponent {
     }
 
     return status === 'Conceptual' ? 'warn' : 'secondary';
+  }
+
+  protected codeLines(walkthrough: CodeWalkthrough): Array<{ number: number; text: string; highlighted: boolean }> {
+    const highlighted = new Set(walkthrough.highlightedLines ?? []);
+    return walkthrough.code.split('\n').map((text, index) => ({
+      number: index + 1,
+      text,
+      highlighted: highlighted.has(index + 1)
+    }));
   }
 }

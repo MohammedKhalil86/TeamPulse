@@ -33,6 +33,8 @@ public static class SeedDataLoader
         var seedDataPath = FindSeedDataPath(contentRootPath);
         var metadata = LoadRequired<SeedMetadata>(seedDataPath, "seed-metadata.json");
 
+        // Learning Lab: Shared JSON seed data
+        // The backend and static Angular build read the same root shared/seed-data files.
         var seed = new TeamPulseSeed(
             LoadRequired<List<User>>(seedDataPath, "users.json"),
             LoadRequired<List<Team>>(seedDataPath, "teams.json"),

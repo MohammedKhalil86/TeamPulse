@@ -21,7 +21,7 @@ HttpClient services
   |     v
   |   shared/seed-data JSON
   |
-  +-- GitHub Pages/static setup
+  +-- GitHub Pages setup
         |
         | Reads assets/seed-data JSON
         | Persists edits in browser localStorage
@@ -31,12 +31,12 @@ HttpClient services
 
 ## Frontend
 
-The frontend lives in `frontend/`. It is an Angular 21.2.9 standalone app with routing, PrimeNG, fake auth, role-aware layout, feature pages, shared UI components, typed API services, and a static localStorage-backed data store for GitHub Pages builds.
+The frontend lives in `frontend/`. It is an Angular 21.2.9 standalone app with routing, PrimeNG, sample authentication, role-aware layout, feature pages, shared UI components, typed API services, and a static localStorage-backed data store for GitHub Pages builds.
 
-The environment configuration controls the data setup:
+The environment configuration controls the technical data setup:
 
-- `src/environments/environment.ts`: `dataMode: 'api'` for local development.
-- `src/environments/environment.production.ts`: `dataMode: 'static'` for static hosting.
+- Local API setup: `src/environments/environment.ts` uses `dataMode: 'api'` and calls `http://localhost:5001/api`.
+- GitHub Pages setup: `src/environments/environment.production.ts` uses `dataMode: 'static'`, loads `assets/seed-data/*.json`, and persists edits in browser localStorage.
 
 The normal business UI does not display the active data setup.
 
@@ -54,4 +54,4 @@ The backend lives in `backend/TeamPulse.Api/`. It is an ASP.NET Core Minimal API
 
 ## No Database Decision
 
-The local API setup uses in-memory seeded data because the workshop is about Angular. Restarting the backend resets API data. The GitHub Pages/static setup initializes browser localStorage from the same seed JSON and keeps edits in that browser until the seed version changes or storage is cleared.
+The local API setup uses in-memory seeded data so the backend remains simple. Restarting the backend resets API data. The GitHub Pages setup initializes browser localStorage from the same seed JSON and keeps edits in that browser until the seed version changes or storage is cleared.

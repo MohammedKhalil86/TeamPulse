@@ -35,4 +35,4 @@ A PrimeNG MCP server may be available in some AI coding environments. If availab
 - TeamPulse has no AI runtime feature of any kind.
 - There is no AI summary generation, no in-app AI assistant, and no AI-generated content at runtime.
 
-The finished app is a standard Angular + ASP.NET Core application that talks to a local in-memory backend. No AI service is called at runtime.
+The finished app is a standard Angular + ASP.NET Core application for the Local API setup, with a GitHub Pages setup that serves the Angular frontend statically from shared seed data. No AI service is called at runtime.

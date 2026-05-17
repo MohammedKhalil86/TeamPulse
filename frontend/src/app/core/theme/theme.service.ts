@@ -14,6 +14,8 @@ export class ThemeService {
   readonly isDark = computed(() => this.selectedTheme() === 'dark');
 
   constructor() {
+    // Learning Lab: effect()
+    // Effects are for side effects: sync the theme signal to the DOM class and localStorage.
     effect(() => {
       const theme = this.selectedTheme();
       document.documentElement.classList.toggle('app-dark', theme === 'dark');

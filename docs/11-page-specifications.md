@@ -15,8 +15,8 @@
 | Learning Lab `/learning` | Entry path for learning content | Redirect route | None | None | Redirects to `/learning/angular` |
 | Learning Lab Angular `/learning/angular` | Map Angular concepts and roadmap topics to pages | Search/filter state, reusable components, computed metadata filters | Cards, tags, buttons, select | Static app metadata in `angular-lab.data.ts` | Authenticated learning page |
 | Learning Lab Angular Detail `/learning/angular/:featureId` | Explain one Angular concept or roadmap topic in TeamPulse | Route params, data lookup, links | Tabs, accordion, panel, table, tags, buttons | Static app metadata in `angular-lab.data.ts` | Authenticated learning page |
-| Learning Lab MCP Servers `/learning/mcp-servers` | Placeholder for upcoming MCP Servers guidance | Lazy route, router links | Section card, tag, button | None | Authenticated learning page |
-| Learning Lab Run Locally `/learning/run-locally` | Placeholder for upcoming local setup guidance | Lazy route, router links | Section card, tag, button | None | Authenticated learning page |
+| Learning Lab MCP Servers `/learning/mcp-servers` | Explain development-time MCP servers used with AI coding tools | Lazy route, router links, static learning content | Section card, tag, button | None | Authenticated learning page |
+| Learning Lab Run Locally `/learning/run-locally` | Explain Local API setup, GitHub Pages setup, and troubleshooting | Lazy route, router links, tabs, static learning content | Section card, tag, button, tabs, accordion | None | Authenticated learning page |
 | Old Angular Lab `/angular-lab`, `/angular-lab/:featureId` | Preserve old links | Redirect routes | None | None | Redirects to Learning Lab Angular routes |
 
 Every authenticated page uses the app shell, role chip, theme toggle, logout, and floating help system. The topbar intentionally avoids a repeated fixed page title; page titles live in each page header.
@@ -35,5 +35,5 @@ The authenticated shell sidebar is expanded by default and can be collapsed by t
 ## Public UI Copy Notes
 
 - Login page copy should be business-oriented and product-facing.
-- Normal business pages should not expose workshop, fake-auth, backend/API, or technical setup wording.
+- Normal business pages should not expose learning-event names, sample-auth, backend/API, or technical setup wording.
 - Learning Lab, docs, and contextual help may still explain Angular, HttpClient, API services, and learning goals where that context is useful.

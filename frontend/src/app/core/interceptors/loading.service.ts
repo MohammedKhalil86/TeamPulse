@@ -4,6 +4,8 @@ import { Injectable, computed, signal } from '@angular/core';
 export class LoadingService {
   private readonly activeRequests = signal(0);
   readonly activeRequestCount = this.activeRequests.asReadonly();
+  // Learning Lab: computed()
+  // The topbar only needs a boolean, derived from the request counter signal.
   readonly isLoading = computed(() => this.activeRequests() > 0);
 
   start(): void {

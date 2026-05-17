@@ -86,7 +86,7 @@ The browser favicon uses the same pulse/spark visual language through `frontend/
 
 ## Public UI Language
 
-Normal business UI should feel like a product, not an internal training shell. Avoid visible labels such as workshop names, fake auth wording, API/backend details, or setup-mode names on business pages.
+Normal business UI should feel like a product, not an internal training shell. Avoid visible labels such as learning-event names, sample-auth wording, API/backend details, or setup names on business pages.
 
 The login page uses the public value proposition:
 

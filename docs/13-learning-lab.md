@@ -11,8 +11,8 @@ The Angular section connects Angular concepts to real TeamPulse screens so learn
 | `/learning` | Redirects to `/learning/angular` |
 | `/learning/angular` | Searchable/filterable Angular topic explorer |
 | `/learning/angular/:featureId` | Detail page for one Angular concept or roadmap topic |
-| `/learning/mcp-servers` | MCP Servers lesson — five dev-time MCP servers explained |
-| `/learning/run-locally` | Local setup guide — clone, run, build, troubleshoot |
+| `/learning/mcp-servers` | MCP Servers lesson - five development-time MCP servers explained |
+| `/learning/run-locally` | Local setup guide - clone, run, build, troubleshoot |
 | `/angular-lab` | Redirects to `/learning/angular` for old links |
 | `/angular-lab/:featureId` | Redirects to `/learning/angular/:featureId` for old links |
 
@@ -54,7 +54,21 @@ Status values are:
 - `Conceptual`
 - `Future extension`
 
-Implemented and partially implemented entries are candidates for future code walkthroughs. Conceptual and future extension entries are roadmap material and should not be referenced from page-level floating help until implemented.
+Implemented and partially implemented entries must have at least one code walkthrough. Conceptual and future extension entries are roadmap material and should not be referenced from page-level floating help until implemented.
+
+## Code Walkthroughs
+
+Curated walkthroughs live in:
+
+```text
+frontend/src/app/features/learning/code-walkthroughs.data.ts
+```
+
+Each walkthrough includes `id`, `title`, `filePath`, `language`, `featureIds`, `code`, and optional `highlightedLines`.
+
+The excerpts are intentionally short and based on real TeamPulse files. Educational comments in source code use the `Learning Lab:` prefix and explain Angular concepts such as signals, computed state, route guards, lazy loading, interceptors, reactive forms, custom pipes/directives, theme effects, static seed data, and deployment fallback behavior.
+
+Every Angular topic marked `Implemented` or `Partially implemented` has at least one `codeWalkthroughIds` entry. `Conceptual` and `Future extension` topics do not require walkthroughs and should remain out of page-level floating help until real implementation exists.
 
 ## Detail Pages
 
@@ -64,6 +78,7 @@ Each detail page includes:
 - Why TeamPulse uses it.
 - Pages and components that use it.
 - Short code snippet from the project where practical.
+- Curated commented code walkthroughs when `codeWalkthroughIds` are configured.
 - Text-based diagram or visual explanation.
 - Related PrimeNG components when relevant.
 - Links to real pages that demonstrate the concept.
@@ -124,14 +139,14 @@ The page is organized into three tabs:
 
 - GitHub repository link: `https://github.com/MohammedKhalil86/TeamPulse`
 - Requirements: Git, Node.js LTS (22 or 24), npm, Angular CLI (optional), .NET SDK 10.
-- Run backend: `cd backend/TeamPulse.Api && dotnet run` → `http://localhost:5001`.
-- Run frontend: `cd frontend && npm install && npm start` → `http://localhost:4200`.
+- Run backend: `cd backend/TeamPulse.Api && dotnet run` -> `http://localhost:5001`.
+- Run frontend: `cd frontend && npm install && npm start` -> `http://localhost:4200`.
 - Build commands table: `npm run build`, `npm run build:github-pages`, `npm run preview:github-pages`.
 - Explains that the Angular frontend calls the ASP.NET Core Minimal API over HTTP.
 
 ### GitHub Pages tab
 
-- Explains the static `dataMode: 'static'` setup.
+- Explains the GitHub Pages setup and the production environment configuration behind it.
 - Explains that seed JSON from `shared/seed-data/` is loaded into browser localStorage.
 - Explains that create/edit/delete actions persist to localStorage only and reset when site data is cleared.
 - Explains shared seed data between local API and static build.

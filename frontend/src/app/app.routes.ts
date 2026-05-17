@@ -16,6 +16,8 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
         path: 'dashboard',
+        // Learning Lab: Lazy loading
+        // loadComponent() keeps each page in its own route chunk until the user navigates there.
         loadComponent: () =>
           import('./features/dashboard/pages/dashboard-page.component').then((m) => m.DashboardPageComponent),
         title: 'Dashboard | TeamPulse'
@@ -23,6 +25,8 @@ export const routes: Routes = [
       {
         path: 'teams',
         canActivate: [roleGuard],
+        // Learning Lab: Route guards
+        // Route data carries the roles that roleGuard checks before loading the page.
         data: { roles: ['Manager', 'TeamMember'] },
         loadComponent: () => import('./features/teams/teams-page.component').then((m) => m.TeamsPageComponent),
         title: 'Teams | TeamPulse'
@@ -106,6 +110,8 @@ export const routes: Routes = [
       { path: 'angular-lab', pathMatch: 'full', redirectTo: '/learning/angular' },
       {
         path: 'angular-lab/:featureId',
+        // Learning Lab: Redirect routes
+        // Old Angular Lab deep links stay valid after the Learning Lab route restructure.
         redirectTo: '/learning/angular/:featureId'
       }
     ]

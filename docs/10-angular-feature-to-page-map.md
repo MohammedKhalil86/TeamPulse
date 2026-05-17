@@ -24,9 +24,10 @@
 | Theming | Whole app | Custom light/dark visual identity | `styles.scss`, `styles/_theme.scss`, `core/theme` |
 | Dark/Light Mode | Shell and login | Persisted user theme choice | `ThemeService`, layout |
 | Angular Animations | Shell/page transitions | Smooth route and card entrances; `[@.disabled]` respects `prefers-reduced-motion` | `shared/animations`, `core/layout` |
-| LocalStorage | Session and theme | Persist fake auth/theme locally | `core/storage`, `core/auth`, `core/theme` |
+| LocalStorage | Session, theme, sidebar, static data | Persist sample session/theme/sidebar locally and support GitHub Pages data persistence | `core/storage`, `core/auth`, `core/theme`, `core/data` |
 | Error Handling | API-driven pages | Show failures through state/toast patterns | Feature pages, API subscriptions |
 | Loading States | API-driven pages | Communicate pending HTTP work | `core/interceptors`, `shared/components/loading-state` |
+| Code Walkthroughs | Learning Lab details and floating help Code tab | Surface real commented code excerpts tied to implemented Angular concepts | `features/learning/code-walkthroughs.data.ts`, `features/angular-lab`, `shared/components/floating-help` |
 
 ## HelpService and Floating Help
 
@@ -36,9 +37,9 @@
 - `computed()` to derive the active page help entry
 - `NavigationEnd` subscription to update the URL signal
 
-`FloatingHelpComponent` injects `HelpService` directly and is fully self-contained. It uses `TooltipModule` (`primeng/tooltip`) for the hover hint and `TabsModule` for the five-tab dialog layout. The help dialog adapts to a learner level selector (Beginner / Intermediate / Advanced) using additional `computed()` values that filter feature refs and code snippets by `minLevel`.
+`FloatingHelpComponent` injects `HelpService` directly and is fully self-contained. It uses `TooltipModule` (`primeng/tooltip`) for the hover hint and `TabsModule` for the five-tab dialog layout. The help dialog adapts to a learner level selector (Beginner / Intermediate / Advanced) using additional `computed()` values that filter feature refs and fallback code snippets by `minLevel`.
 
-Content in `help.data.ts` links each page to its Angular features using `labId` keys that match `AngularLabFeature.id` values in `angular-lab.data.ts`, creating a two-way connection between the help popup and the Learning Lab explorer.
+Content in `help.data.ts` links each page to its Angular features using `labId` keys that match `AngularLabFeature.id` values in `angular-lab.data.ts`, creating a two-way connection between the help popup and the Learning Lab explorer. The Code tab also matches those `labId` values to curated walkthroughs from `features/learning/code-walkthroughs.data.ts`.
 
 ## Route Guard Detail
 

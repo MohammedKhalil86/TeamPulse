@@ -11,6 +11,8 @@ export class StorageService {
     try {
       return JSON.parse(value) as T;
     } catch {
+      // Learning Lab: localStorage
+      // Bad browser storage should fail closed and clear itself instead of crashing every page load.
       localStorage.removeItem(key);
       return null;
     }

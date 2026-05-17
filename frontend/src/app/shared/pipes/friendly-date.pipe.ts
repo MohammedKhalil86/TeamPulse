@@ -5,6 +5,8 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true
 })
 export class FriendlyDatePipe implements PipeTransform {
+  // Learning Lab: Custom pipes
+  // Pipes keep display formatting reusable and keep date math out of templates.
   transform(value: string | Date | null | undefined): string {
     if (!value) {
       return 'No date';

@@ -206,6 +206,8 @@ interface RoleOption {
   ]
 })
 export class LoginPageComponent {
+  // Learning Lab: Dependency injection
+  // Login composes auth, forms, route state, navigation, and theme services through inject().
   private readonly auth = inject(AuthService);
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
@@ -220,6 +222,8 @@ export class LoginPageComponent {
   ];
 
   protected readonly form = this.fb.nonNullable.group({
+    // Learning Lab: Reactive forms + validators
+    // The form model owns validation; the template only binds controls and submit state.
     role: this.fb.nonNullable.control<AppRole>('Manager', Validators.required),
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]

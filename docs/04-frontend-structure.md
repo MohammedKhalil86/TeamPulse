@@ -20,7 +20,8 @@ frontend/src/app/
     directives/
     pipes/
   features/
-    angular-lab/
+    angular-lab/         Legacy folder name for Angular learning pages
+    learning/
     dashboard/
     evaluations/
     feedback/
@@ -37,7 +38,7 @@ frontend/src/app/
 | Folder | Responsibility |
 | --- | --- |
 | `core/api` | Typed HttpClient services for backend endpoints |
-| `core/auth` | Fake login/logout and current session state |
+| `core/auth` | Sample login/logout and current session state |
 | `core/data` | Static seed-data loader and localStorage-backed data store for static hosting |
 | `core/guards` | Auth and role route guards |
 | `core/interceptors` | HTTP loading interceptor and loading service |

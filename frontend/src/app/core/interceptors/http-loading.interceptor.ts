@@ -7,5 +7,7 @@ export const httpLoadingInterceptor: HttpInterceptorFn = (request, next) => {
   const loading = inject(LoadingService);
   loading.start();
 
+  // Learning Lab: Interceptors + finalize()
+  // finalize() runs for success and error responses, so the global loading count cannot stay stuck.
   return next(request).pipe(finalize(() => loading.stop()));
 };

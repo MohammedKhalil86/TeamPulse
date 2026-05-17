@@ -37,7 +37,7 @@ There is no persistence beyond process memory. Create/update/delete operations m
 
 ## Seed Relationships
 
-The shared seed data preserves the workshop relationships:
+The shared seed data preserves the TeamPulse relationships:
 
 - `User` records include managers and team member identities.
 - `Team.managerId` points to a manager user.

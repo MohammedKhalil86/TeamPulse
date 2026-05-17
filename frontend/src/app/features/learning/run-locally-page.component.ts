@@ -151,7 +151,7 @@ npm run build:github-pages</code></pre>
 
           <tp-section-card title="Not a normal product mode" subtitle="GitHub Pages is a demo convenience, not a production deployment model.">
             <p class="note-spaced">
-              The static setup is provided so the workshop can be shared without running a server. It is not the recommended way to run TeamPulse for real use cases. For production-like evaluation, run the full local stack (backend + frontend) as described in the Local Setup tab.
+              The static setup is provided so TeamPulse can be shared without running a server. It is not the recommended way to run TeamPulse for real use cases. For production-like evaluation, run the full local stack (backend + frontend) as described in the Local Setup tab.
             </p>
           </tp-section-card>
         </p-tabpanel>

@@ -8,6 +8,8 @@ import { RiskLevel } from '../../core/models/team-pulse.models';
 export class RiskHighlightDirective {
   @Input('tpRiskHighlight') risk: RiskLevel | string | null | undefined;
 
+  // Learning Lab: Custom directives
+  // HostBinding lets a directive project data-driven CSS classes onto the element that uses it.
   @HostBinding('class.tp-risk-low') get low(): boolean {
     return this.risk === 'Low';
   }

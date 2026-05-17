@@ -2,6 +2,8 @@
 
 The backend is an ASP.NET Core Minimal API in `backend/TeamPulse.Api`. It uses in-memory data through `TeamPulseDataStore`.
 
+The Local API setup keeps the REST endpoints visible for learners and local development. The GitHub Pages setup does not remove or replace this backend; it uses the same shared seed JSON through the Angular static data store.
+
 Base URL used by the Angular app:
 
 ```text
@@ -105,4 +107,4 @@ Create evaluation request:
 }
 ```
 
-The API does not enforce real authorization. Role limits are demonstrated in the Angular UI.
+The API does not enforce production authorization. Role limits are demonstrated in the Angular UI.

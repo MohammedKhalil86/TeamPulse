@@ -290,6 +290,8 @@ export class StaticDataStore {
           return of(undefined);
         }
 
+        // Learning Lab: shared JSON seed data + static setup
+        // GitHub Pages builds load the same seed JSON files as the backend, then persist them in namespaced localStorage keys.
         return this.loadSeedCollections().pipe(
           tap((collections) => {
             this.writeCollection('users', collections.users);
@@ -318,6 +320,8 @@ export class StaticDataStore {
   }
 
   private loadSeedCollections(): Observable<SeedCollections> {
+    // Learning Lab: RxJS forkJoin()
+    // All seed files load in parallel; the store initializes only after every collection has arrived.
     return forkJoin({
       users: this.getSeedFile<SeedUser[]>('users.json'),
       teams: this.getSeedFile<Team[]>('teams.json'),

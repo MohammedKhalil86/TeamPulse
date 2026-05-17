@@ -598,26 +598,26 @@ transform(value: string): string {
 
   {
     routePrefix: '/learning/run-locally',
-    pageTitle: 'Learning Lab — Run Locally',
+    pageTitle: 'Learning Lab - Run Locally',
     businessOverview:
       'The Run Locally guide covers everything needed to clone TeamPulse, run the ASP.NET Core Minimal API backend and Angular frontend together, understand the GitHub Pages static build, and troubleshoot common setup issues.',
     userActions: [
       'Follow the local setup steps',
-      'Understand GitHub Pages static mode vs local API mode',
+      'Compare the Local API setup with the GitHub Pages setup',
       'Troubleshoot common setup problems'
     ],
     angularFeatures: [
-      { labId: 'standalone-components', name: 'Standalone Components', minLevel: 'Beginner', pageNote: 'A self-contained standalone component — no services, no HTTP calls, no state management needed for a static guide page.' },
+      { labId: 'standalone-components', name: 'Standalone Components', minLevel: 'Beginner', pageNote: 'A self-contained standalone component with no services, no HTTP calls, and no state management needed for a static guide page.' },
       { labId: 'routing', name: 'Routing', minLevel: 'Beginner', pageNote: 'Lazy-loaded via `loadComponent` in `app.routes.ts`. The browser downloads this chunk only when the user visits the page.' },
       { labId: 'lazy-loading', name: 'Lazy Loading', minLevel: 'Intermediate', pageNote: 'The Angular build bundles this page into a separate chunk named `run-locally-page-component` visible in the build output.' }
     ],
     primeNgComponents: ['Tabs', 'TabList', 'TabPanel', 'Accordion', 'Panel', 'Tag'],
     relatedLabIds: ['standalone-components', 'routing', 'lazy-loading'],
     diagram: `Route /learning/run-locally
-  → lazy chunk: run-locally-page-component
-  → static content only (no API, no signals)
-  → tabs: Local Setup | GitHub Pages | Troubleshooting
-  → accordion in Troubleshooting tab`,
+  -> lazy chunk: run-locally-page-component
+  -> static content only (no API, no signals)
+  -> tabs: Local Setup | GitHub Pages | Troubleshooting
+  -> accordion in Troubleshooting tab`,
     codeSnippets: [
       {
         label: 'No signals needed for a static page',

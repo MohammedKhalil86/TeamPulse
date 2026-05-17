@@ -1,5 +1,21 @@
 # Change Log
 
+## 2026-05-17 - README and docs source of truth
+
+- Reworked the README around TeamPulse v2 positioning, MIT license, repository URL, sample-data warning, requirements, Local API setup, GitHub Pages setup, credentials, project structure, Learning Lab pages, troubleshooting, and contribution notes.
+- Aligned core docs with learner-friendly setup names: Local API setup and GitHub Pages setup.
+- Updated overview, business scope, architecture, frontend/backend docs, data/auth docs, page specs, Learning Lab, deployment, GitHub workflow, PrimeNG usage, agent guidelines, and demo script to match the current app shape.
+- Clarified that normal product UI should avoid technical setup wording while docs and Learning Lab can explain the implementation.
+
+## 2026-05-17 - Commented code walkthroughs
+
+- Added concise `Learning Lab:` comments to real implemented code across app config, routing, guards, auth, API services, interceptors, loading state, theme effects, storage, static seed initialization, dashboard state, login forms, route params, shared inputs/outputs, pipes, directives, animations, deployment fallback, TypeScript models, and backend seed loading.
+- Added `features/learning/code-walkthroughs.data.ts` with curated walkthrough records containing id, title, file path, language, feature IDs, highlighted lines, and short commented code excerpts.
+- Linked Learning Lab Angular detail pages to walkthroughs through `codeWalkthroughIds`.
+- Updated floating help so the Code tab shows related real commented walkthroughs before fallback snippets.
+- Verified every Angular topic marked `Implemented` or `Partially implemented` has at least one existing walkthrough ID.
+- Updated Learning Lab, floating help, Angular feature map, and changelog documentation.
+
 ## 2026-05-17 - Floating help system upgrade
 
 - Replaced the simple four-section help dialog with a richer learning popup.

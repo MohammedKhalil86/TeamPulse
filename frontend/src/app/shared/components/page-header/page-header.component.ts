@@ -66,10 +66,14 @@ import { ButtonModule } from 'primeng/button';
   ]
 })
 export class PageHeaderComponent {
+  // Learning Lab: Component inputs
+  // Parent pages configure the shared header without duplicating the header template.
   @Input() eyebrow = 'TeamPulse';
   @Input({ required: true }) title = '';
   @Input() subtitle = '';
   @Input() actionLabel = '';
   @Input() actionIcon = 'pi pi-plus';
+  // Learning Lab: Component outputs
+  // The shared header emits a semantic action event while the page decides what it means.
   @Output() readonly action = new EventEmitter<void>();
 }

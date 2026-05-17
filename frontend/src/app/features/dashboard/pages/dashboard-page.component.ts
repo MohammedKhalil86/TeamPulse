@@ -504,6 +504,8 @@ interface TeamMemberCount {
   ]
 })
 export class DashboardPageComponent {
+  // Learning Lab: Dependency injection
+  // The page asks Angular for the services it needs instead of constructing them manually.
   protected readonly auth = inject(AuthService);
   private readonly dashboardApi = inject(DashboardApiService);
   private readonly evaluationsApi = inject(EvaluationsApiService);
@@ -512,6 +514,8 @@ export class DashboardPageComponent {
   private readonly router = inject(Router);
 
   protected readonly loading = signal(true);
+  // Learning Lab: Signals
+  // Loaded API data lives in signals so the template and chart computed values update reactively.
   protected readonly managerDashboard = signal<ManagerDashboard | null>(null);
   protected readonly memberDashboard = signal<MemberDashboard | null>(null);
   protected readonly members = signal<MemberProfile[]>([]);
@@ -561,6 +565,8 @@ export class DashboardPageComponent {
   };
 
   protected readonly evaluationCompletion = computed(() => {
+    // Learning Lab: computed()
+    // The percentage is derived from signals; it recalculates when dashboard or evaluations data changes.
     const memberCount = this.managerDashboard()?.memberCount ?? 0;
     if (!memberCount) {
       return 0;
@@ -605,6 +611,8 @@ export class DashboardPageComponent {
   });
 
   protected readonly teamHealthChart = computed<ChartData<'bar'>>(() => {
+    // Learning Lab: PrimeNG charts + Chart.js
+    // PrimeNG renders the chart, while Chart.js types keep the data structure honest.
     const teams = this.managerDashboard()?.teams ?? [];
 
     return {
@@ -702,6 +710,8 @@ export class DashboardPageComponent {
     const user = this.auth.currentUser();
 
     if (this.isManager()) {
+      // Learning Lab: RxJS forkJoin()
+      // Manager dashboard data loads in parallel and updates signals once all requests complete.
       forkJoin({
         dashboard: this.dashboardApi.getManagerDashboard(),
         members: this.membersApi.getMembers(),
@@ -720,6 +730,8 @@ export class DashboardPageComponent {
     } else if (user) {
       this.dashboardApi.getMemberDashboard(user.userId).pipe(
         switchMap((dashboard) => {
+          // Learning Lab: RxJS switchMap()
+          // The second request depends on the member profile returned by the first dashboard request.
           this.memberDashboard.set(dashboard);
           if (!dashboard.profile) {
             return of<Evaluation[]>([]);

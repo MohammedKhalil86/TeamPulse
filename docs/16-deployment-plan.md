@@ -1,6 +1,6 @@
 # Deployment Plan
 
-TeamPulse is local-first. Deployment is optional and should not complicate the workshop. The project now has a GitHub Pages-ready frontend build while keeping the local ASP.NET Core API setup unchanged.
+TeamPulse is local-first. Deployment is optional and should not complicate development. The project has a GitHub Pages-ready frontend build while keeping the local ASP.NET Core API setup unchanged.
 
 ## Local First
 

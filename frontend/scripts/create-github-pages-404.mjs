@@ -13,6 +13,8 @@ if (!existsSync(indexPath)) {
   throw new Error(`Cannot create GitHub Pages fallback because index.html was not found at ${indexPath}.`);
 }
 
+// Learning Lab: Deployment
+// GitHub Pages serves 404.html for deep links, so the script copies the Angular index fallback.
 copyFileSync(indexPath, fallbackPath);
 writeFileSync(noJekyllPath, '');
 

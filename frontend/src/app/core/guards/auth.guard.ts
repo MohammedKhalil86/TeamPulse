@@ -10,5 +10,7 @@ export const authGuard: CanActivateFn = (_route, state) => {
     return true;
   }
 
+  // Learning Lab: Route guards
+  // Returning a UrlTree redirects without manually navigating inside the guard.
   return router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
 };

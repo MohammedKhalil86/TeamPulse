@@ -7,6 +7,8 @@ import { ManagerDashboard, MemberDashboard } from '../models/team-pulse.models';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardApiService {
+  // Learning Lab: HttpClient services
+  // Feature pages depend on this service instead of constructing URLs or calling HttpClient directly.
   private readonly http = inject(HttpClient);
   private readonly apiBaseUrl = inject(API_BASE_URL);
   private readonly dataMode = inject(DATA_MODE);
@@ -17,6 +19,8 @@ export class DashboardApiService {
       return this.staticData.getManagerDashboard();
     }
 
+    // Learning Lab: Local API setup
+    // In local development this calls the ASP.NET Core Minimal API through HttpClient.
     return this.http.get<ManagerDashboard>(`${this.apiBaseUrl}/dashboard/manager`);
   }
 

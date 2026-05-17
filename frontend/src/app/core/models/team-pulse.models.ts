@@ -1,3 +1,5 @@
+// Learning Lab: TypeScript essentials
+// Union types model allowed business values and prevent accidental strings in forms, services, and templates.
 export type AppRole = 'Manager' | 'TeamMember';
 export type RiskLevel = 'Low' | 'Medium' | 'High';
 export type Seniority = 'Junior' | 'Mid' | 'Senior' | 'Lead';
