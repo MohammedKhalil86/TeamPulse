@@ -90,7 +90,7 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
           </div>
         </tp-section-card>
 
-        <tp-section-card title="Team Goals" subtitle="Seeded team-level goals from the API.">
+        <tp-section-card title="Team Goals" subtitle="Team-level goals and delivery focus.">
           <div class="goal-list">
             @for (goal of goals(); track goal.id) {
               <article>
@@ -101,7 +101,7 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
                 <p-progressbar [value]="goal.progress" />
               </article>
             } @empty {
-              <tp-empty-state title="No team goals" message="No team goals are seeded for this team." />
+              <tp-empty-state title="No team goals" message="No team goals are available for this team." />
             }
           </div>
         </tp-section-card>
@@ -161,7 +161,7 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
       .risk-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 0.75rem;
+        gap: var(--tp-space-3);
         align-items: center;
       }
 
@@ -169,18 +169,27 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
       .goal-list article,
       .feedback-list article {
         display: grid;
-        gap: 0.5rem;
+        gap: var(--tp-space-2);
         border: 2px solid var(--tp-ink);
         border-radius: var(--tp-radius-sm);
         background: color-mix(in srgb, var(--tp-hot) 8%, var(--tp-panel));
-        padding: 0.85rem;
+        padding: var(--tp-space-4);
       }
 
       .score-stack,
       .goal-list,
       .feedback-list {
         display: grid;
-        gap: 0.75rem;
+        gap: var(--tp-space-3);
+      }
+
+      .goal-list article > div {
+        display: grid;
+        gap: var(--tp-space-1);
+      }
+
+      .goal-list strong {
+        overflow-wrap: anywhere;
       }
 
       span,

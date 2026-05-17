@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../auth/auth.service';
 import { LoadingService } from '../interceptors/loading.service';
+import { StorageService } from '../storage/storage.service';
 import { ThemeService } from '../theme/theme.service';
 import { AppLogoComponent } from '../../shared/components/app-logo/app-logo.component';
 import { FloatingHelpComponent } from '../../shared/components/floating-help/floating-help.component';
@@ -22,12 +23,24 @@ interface NavItem {
   imports: [AppLogoComponent, ButtonModule, FloatingHelpComponent, RoleChipComponent, RouterLink, RouterLinkActive, RouterOutlet],
   animations: [routeTransition],
   template: `
-    <div class="app-frame">
+    <div class="app-frame" [class.sidebar-collapsed]="sidebarCollapsed()">
       <aside class="sidebar">
-        <tp-app-logo />
+        <div class="sidebar-header">
+          <tp-app-logo [compact]="sidebarCollapsed()" />
+          <button
+            pButton
+            type="button"
+            [icon]="sidebarCollapsed() ? 'pi pi-angle-right' : 'pi pi-angle-left'"
+            [rounded]="true"
+            [text]="true"
+            [attr.aria-label]="sidebarCollapsed() ? 'Expand navigation' : 'Collapse navigation'"
+            [title]="sidebarCollapsed() ? 'Expand navigation' : 'Collapse navigation'"
+            (click)="toggleSidebar()"
+          ></button>
+        </div>
         <nav aria-label="Primary navigation">
           @for (item of visibleNavItems(); track item.route) {
-            <a [routerLink]="item.route" routerLinkActive="active">
+            <a [routerLink]="item.route" routerLinkActive="active" [attr.aria-label]="item.label" [title]="sidebarCollapsed() ? item.label : null">
               <i [class]="item.icon"></i>
               <span>{{ item.label }}</span>
             </a>
@@ -37,10 +50,6 @@ interface NavItem {
 
       <section class="workspace">
         <header class="topbar">
-          <div>
-            <p class="eyebrow">Atos Angular Workshop</p>
-            <h1>{{ pageTitle() }}</h1>
-          </div>
           <div class="topbar-actions">
             @if (loading.isLoading()) {
               <span class="loader">Loading</span>
@@ -78,8 +87,13 @@ interface NavItem {
       .app-frame {
         display: grid;
         min-height: 100vh;
-        grid-template-columns: 17rem 1fr;
+        grid-template-columns: 17rem minmax(0, 1fr);
         background: var(--tp-surface);
+        transition: grid-template-columns var(--tp-motion);
+      }
+
+      .app-frame.sidebar-collapsed {
+        grid-template-columns: 5.75rem minmax(0, 1fr);
       }
 
       .sidebar {
@@ -88,26 +102,79 @@ interface NavItem {
         display: flex;
         height: 100vh;
         flex-direction: column;
-        gap: 2rem;
+        gap: var(--tp-space-5);
         border-right: 3px solid var(--tp-ink);
         background: var(--tp-panel);
-        padding: 1.25rem;
+        padding: var(--tp-space-5);
+        transition:
+          padding var(--tp-motion),
+          width var(--tp-motion);
+      }
+
+      .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--tp-space-3);
+        min-width: 0;
+      }
+
+      .app-frame.sidebar-collapsed .sidebar {
+        padding: var(--tp-space-4) var(--tp-space-3);
+      }
+
+      .app-frame.sidebar-collapsed .sidebar-header {
+        justify-content: center;
+      }
+
+      .app-frame.sidebar-collapsed .sidebar-header button {
+        position: absolute;
+        right: -1.05rem;
+        top: 4.6rem;
+        border: 2px solid var(--tp-ink);
+        background: var(--tp-panel);
+        box-shadow: var(--tp-shadow-xs);
       }
 
       nav {
         display: grid;
-        gap: 0.5rem;
+        gap: var(--tp-space-2);
       }
 
       nav a {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: var(--tp-space-3);
         border: 2px solid transparent;
         border-radius: 0.35rem;
+        min-height: 2.85rem;
         padding: 0.75rem;
         color: var(--tp-text);
         font-weight: 800;
+        line-height: 1.2;
+        transition:
+          background-color var(--tp-motion-fast),
+          box-shadow var(--tp-motion-fast),
+          color var(--tp-motion-fast);
+      }
+
+      nav a i {
+        width: 1.15rem;
+        text-align: center;
+      }
+
+      .app-frame.sidebar-collapsed nav a {
+        justify-content: center;
+        padding-inline: 0;
+      }
+
+      .app-frame.sidebar-collapsed nav a span {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
       }
 
       nav a.active,
@@ -128,34 +195,19 @@ interface NavItem {
         z-index: 5;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
         gap: 1rem;
         border-bottom: 3px solid var(--tp-ink);
         background: color-mix(in srgb, var(--tp-panel) 94%, transparent);
-        padding: 1rem 1.5rem;
+        min-height: 4.25rem;
+        padding: var(--tp-space-4) var(--tp-space-6);
         backdrop-filter: blur(12px);
-      }
-
-      .eyebrow,
-      h1 {
-        margin: 0;
-      }
-
-      .eyebrow {
-        color: var(--tp-muted);
-        font-size: 0.72rem;
-        font-weight: 900;
-        text-transform: uppercase;
-      }
-
-      h1 {
-        font-size: 1.35rem;
       }
 
       .topbar-actions {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: var(--tp-space-3);
       }
 
       .loader {
@@ -169,11 +221,15 @@ interface NavItem {
       }
 
       main {
-        padding: 1.5rem;
+        padding: var(--tp-space-6);
       }
 
       @media (max-width: 920px) {
         .app-frame {
+          grid-template-columns: 1fr;
+        }
+
+        .app-frame.sidebar-collapsed {
           grid-template-columns: 1fr;
         }
 
@@ -184,13 +240,38 @@ interface NavItem {
           border-bottom: 3px solid var(--tp-ink);
         }
 
+        .app-frame.sidebar-collapsed .sidebar {
+          padding: var(--tp-space-5);
+        }
+
+        .app-frame.sidebar-collapsed .sidebar-header {
+          justify-content: space-between;
+        }
+
+        .app-frame.sidebar-collapsed .sidebar-header button {
+          position: static;
+        }
+
+        .app-frame.sidebar-collapsed nav a {
+          justify-content: flex-start;
+          padding: 0.75rem;
+        }
+
+        .app-frame.sidebar-collapsed nav a span {
+          position: static;
+          width: auto;
+          height: auto;
+          overflow: visible;
+          clip: auto;
+          white-space: normal;
+        }
+
         nav {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
         .topbar {
-          align-items: flex-start;
-          flex-direction: column;
+          align-items: center;
         }
 
         .topbar-actions {
@@ -204,7 +285,11 @@ export class AppLayoutComponent {
   protected readonly auth = inject(AuthService);
   protected readonly loading = inject(LoadingService);
   protected readonly theme = inject(ThemeService);
+  private readonly storage = inject(StorageService);
   private readonly router = inject(Router);
+
+  private readonly sidebarCollapsedKey = 'teampulse.v2.sidebarCollapsed';
+  protected readonly sidebarCollapsed = signal(this.storage.get<boolean>(this.sidebarCollapsedKey) ?? false);
 
   protected readonly reducedMotion = signal(
     typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -217,6 +302,7 @@ export class AppLayoutComponent {
     { label: 'Evaluations', icon: 'pi pi-star', route: '/evaluations' },
     { label: 'Feedback', icon: 'pi pi-comments', route: '/feedback' },
     { label: 'Goals', icon: 'pi pi-flag', route: '/goals' },
+    { label: 'How TeamPulse Works', icon: 'pi pi-compass', route: '/how-teampulse-works' },
     { label: 'Angular Lab', icon: 'pi pi-bolt', route: '/angular-lab' }
   ];
 
@@ -236,7 +322,7 @@ export class AppLayoutComponent {
     if (url === '/dashboard') {
       return {
         businessPurpose:
-          'The dashboard changes by fake role: managers see team and organization signals, while team members see their own profile, goals, feedback, and evaluation data.',
+          'The dashboard adapts by role: managers see team and organization signals, while team members see their own profile, goals, feedback, and evaluation data.',
         angularFeatures: ['Role-based rendering', 'API services', 'Signals', 'Computed values', 'Conditional templates'],
         primeNgComponents: ['Button', 'ProgressBar', 'Tag', 'Dialog', 'Dashboard cards'],
         labEntries: ['Role-based UI', 'HttpClient services', 'Signals and computed values', 'Shared stat-card usage']
@@ -290,7 +376,7 @@ export class AppLayoutComponent {
 
     if (url === '/feedback') {
       return {
-        businessPurpose: 'Feedback captures recognition, improvement, risk, and general coaching signals from seeded API data.',
+        businessPurpose: 'Feedback captures recognition, improvement, risk, and general coaching signals across the workspace.',
         angularFeatures: ['Computed filters', 'Role-scoped lists', 'Reactive Forms', 'Signals', 'HTTP services'],
         primeNgComponents: ['Card', 'Table', 'Dialog', 'Select', 'DatePicker', 'Textarea', 'Tag', 'Toast'],
         labEntries: ['List filtering', 'Role-aware views', 'Dialog forms', 'PrimeNG tags']
@@ -306,6 +392,16 @@ export class AppLayoutComponent {
       };
     }
 
+    if (url === '/how-teampulse-works') {
+      return {
+        businessPurpose:
+          'How TeamPulse Works gives managers and team members a role-aware guide for reading health, goals, feedback, evaluations, and risk signals.',
+        angularFeatures: ['Lazy route', 'Route guard', 'Signals', 'Computed role-aware content', 'Router links'],
+        primeNgComponents: ['Button', 'Tag'],
+        labEntries: ['Routing', 'Route guards', 'Signals and computed values', 'Role-based UI']
+      };
+    }
+
     if (url === '/angular-lab' || url.startsWith('/angular-lab/')) {
       return {
         businessPurpose:
@@ -317,7 +413,7 @@ export class AppLayoutComponent {
     }
 
     return {
-      businessPurpose: `Use ${this.pageTitle()} to explore TeamPulse workflows with seeded API data.`,
+      businessPurpose: `Use ${this.pageTitle()} to explore TeamPulse workflows and sample workspace data.`,
       angularFeatures: ['Standalone components', 'Router', 'Route guards', 'Signals', 'HttpClient'],
       primeNgComponents: ['Button', 'Tag', 'Dialog', 'Table', 'Card'],
       labEntries: ['Routing', 'HttpClient', 'PrimeNG']
@@ -327,5 +423,13 @@ export class AppLayoutComponent {
   protected logout(): void {
     this.auth.logout();
     this.router.navigateByUrl('/login');
+  }
+
+  protected toggleSidebar(): void {
+    this.sidebarCollapsed.update((collapsed) => {
+      const next = !collapsed;
+      this.storage.set(this.sidebarCollapsedKey, next);
+      return next;
+    });
   }
 }

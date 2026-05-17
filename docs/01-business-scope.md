@@ -19,9 +19,31 @@ TeamPulse represents a lightweight engineering team management platform. The bus
 - Feedback tracking.
 - Goals tracking.
 - One-to-one notes on member profiles for managers.
+- Role-aware business guide: How TeamPulse Works.
 - Theme switching.
 - Floating page help.
 - Angular Lab learning map.
+
+## How TeamPulse Works Guide
+
+The `How TeamPulse Works` page is a business/user guide available to both managers and team members.
+
+For managers, it explains how to use team health, goals, evaluations, feedback, and risk signals as a practical review rhythm:
+
+1. Start from Dashboard.
+2. Review team health.
+3. Check members and risks.
+4. Update goals.
+5. Review feedback and evaluations.
+
+For team members, it explains how to use personal goals, feedback, evaluations, skill/profile information, and team health context:
+
+1. Review dashboard.
+2. Check own goals.
+3. Read feedback.
+4. Track evaluation trends.
+
+The guide includes the sample-data notice used by public-facing TeamPulse screens.
 
 ## Excluded Features
 

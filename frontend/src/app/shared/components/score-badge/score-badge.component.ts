@@ -18,21 +18,22 @@ import { ScoreLabelPipe } from '../../pipes/score-label.pipe';
       .score-badge {
         display: inline-grid;
         min-width: 8rem;
-        gap: 0.25rem;
+        gap: var(--tp-space-1);
         border: 2px solid var(--tp-ink);
         border-radius: var(--tp-radius-sm);
         background: var(--tp-panel);
         box-shadow: var(--tp-shadow-xs);
-        padding: 0.45rem 0.55rem;
+        padding: 0.5rem 0.6rem;
       }
 
       strong {
-        font-size: 1.1rem;
+        font-size: 1.12rem;
+        line-height: 1;
       }
 
       span span {
         color: var(--tp-muted);
-        font-size: 0.72rem;
+        font-size: 0.76rem;
         font-weight: 900;
         text-transform: uppercase;
       }

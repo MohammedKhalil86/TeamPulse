@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { SelectModule } from 'primeng/select';
 import { AuthService } from '../../core/auth/auth.service';
+import { ThemeService } from '../../core/theme/theme.service';
 import { AppRole } from '../../core/models/team-pulse.models';
 import { AppLogoComponent } from '../../shared/components/app-logo/app-logo.component';
 
@@ -23,18 +24,31 @@ interface RoleOption {
   imports: [AppLogoComponent, ButtonModule, CardModule, InputTextModule, PasswordModule, ReactiveFormsModule, SelectModule],
   template: `
     <main class="login-page">
+      <button
+        class="theme-toggle"
+        pButton
+        type="button"
+        [icon]="theme.isDark() ? 'pi pi-sun' : 'pi pi-moon'"
+        [rounded]="true"
+        severity="secondary"
+        [attr.aria-label]="theme.isDark() ? 'Switch to light theme' : 'Switch to dark theme'"
+        (click)="theme.toggle()"
+      ></button>
+
       <section class="login-hero">
         <tp-app-logo size="large" />
         <div class="hero-copy">
-          <p class="eyebrow">Fake Auth Lab</p>
-          <h1>Signal-rich team management for Angular practice.</h1>
-          <p>Use seeded backend users, real HTTP calls, and a local-only fake session.</p>
+          <h1>Understand your team. Improve delivery. Grow people.</h1>
+          <p>
+            TeamPulse helps engineering managers and team members track goals, feedback, evaluations, skills, and team health
+            in a simple visual workspace.
+          </p>
         </div>
       </section>
 
       <p-card styleClass="login-card">
-        <ng-template #title>Workshop Login</ng-template>
-        <ng-template #subtitle>Pick a role, load demo credentials, and enter TeamPulse.</ng-template>
+        <ng-template #title>Sign in to TeamPulse</ng-template>
+        <ng-template #subtitle>Select a role and use the sample credentials to enter your workspace.</ng-template>
 
         <form [formGroup]="form" (ngSubmit)="login()">
           <label>
@@ -68,9 +82,11 @@ interface RoleOption {
           }
 
           <div class="actions">
-            <button pButton type="button" label="Demo Credentials" icon="pi pi-sparkles" severity="secondary" (click)="fillDemoCredentials()"></button>
+            <button pButton type="button" label="Use Sample Credentials" icon="pi pi-sparkles" severity="secondary" (click)="fillDemoCredentials()"></button>
             <button pButton type="submit" label="Login" icon="pi pi-arrow-right" [disabled]="form.invalid || busy()"></button>
           </div>
+
+          <p class="data-notice">TeamPulse uses sample workspace data. Do not enter real employee or company information.</p>
         </form>
       </p-card>
     </main>
@@ -78,6 +94,7 @@ interface RoleOption {
   styles: [
     `
       .login-page {
+        position: relative;
         display: grid;
         min-height: 100vh;
         grid-template-columns: minmax(0, 1.15fr) minmax(23rem, 0.85fr);
@@ -90,6 +107,15 @@ interface RoleOption {
         padding: 2rem;
       }
 
+      .theme-toggle {
+        position: fixed;
+        top: 1.25rem;
+        right: 1.25rem;
+        z-index: 2;
+        border: 2px solid var(--tp-ink);
+        box-shadow: var(--tp-shadow-xs);
+      }
+
       .login-hero {
         display: grid;
         gap: 2rem;
@@ -99,28 +125,16 @@ interface RoleOption {
         max-width: 45rem;
       }
 
-      .eyebrow {
-        display: inline-block;
-        margin: 0 0 1rem;
-        border: 3px solid var(--tp-ink);
-        background: var(--tp-warning);
-        box-shadow: 5px 5px 0 var(--tp-ink);
-        color: #121212;
-        font-weight: 900;
-        padding: 0.35rem 0.6rem;
-        text-transform: uppercase;
-      }
-
       h1 {
         margin: 0;
-        font-size: clamp(2.4rem, 7vw, 5.75rem);
+        font-size: clamp(2.4rem, 7vw, 5.6rem);
         line-height: 0.95;
       }
 
-      .hero-copy p:last-child {
-        max-width: 35rem;
+      .hero-copy p {
+        max-width: 39rem;
         color: var(--tp-muted);
-        font-size: 1.1rem;
+        font-size: 1.16rem;
         line-height: 1.6;
       }
 
@@ -160,6 +174,16 @@ interface RoleOption {
         background: color-mix(in srgb, var(--tp-accent) 16%, var(--tp-panel));
       }
 
+      .data-notice {
+        margin: 0;
+        border-left: 4px solid var(--tp-hot);
+        color: var(--tp-muted);
+        font-size: 0.84rem;
+        font-weight: 700;
+        line-height: 1.45;
+        padding: 0.15rem 0 0.15rem 0.7rem;
+      }
+
       .error {
         margin: 0;
         background: color-mix(in srgb, var(--tp-danger) 22%, var(--tp-panel));
@@ -186,6 +210,7 @@ export class LoginPageComponent {
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  protected readonly theme = inject(ThemeService);
 
   protected readonly busy = signal(false);
   protected readonly error = signal<string | null>(null);
@@ -230,7 +255,7 @@ export class LoginPageComponent {
         this.router.navigateByUrl(returnUrl);
       },
       error: () => {
-        this.error.set('Login failed. Use one of the seeded demo users.');
+        this.error.set('Login failed. Check the sample credentials and try again.');
         this.busy.set(false);
       },
       complete: () => this.busy.set(false)

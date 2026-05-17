@@ -6,13 +6,13 @@
 | Routing | All app navigation | Public login plus authenticated shell routes, plus Not Found fallback | `frontend/src/app/app.routes.ts` |
 | Lazy Loading | Route components | Keep page code split by route | `app.routes.ts`, `features/*` |
 | Route Guards | Protected app shell and data routes | `authGuard` redirects unauthenticated users to login; `roleGuard` validates the active app role before entering any business data route | `core/guards/auth.guard.ts`, `core/guards/role.guard.ts` |
-| Role-based UI | Dashboard, Teams, Members, Evaluations, Feedback, Goals | Manager/member workflows differ | `core/auth`, feature components |
+| Role-based UI | Dashboard, Teams, Members, Evaluations, Feedback, Goals, How TeamPulse Works | Manager/member workflows differ | `core/auth`, feature components |
 | Services | API, auth, theme, storage, loading | Share state and HTTP logic | `core/api`, `core/auth`, `core/theme`, `core/storage` |
 | Dependency Injection | Services and API URL | Keep dependencies configurable and testable | `app.config.ts`, `core/api/api.config.ts` |
 | HttpClient | All backend data pages | Use real Minimal API calls | `core/api` |
 | Interceptors | Global loading | Track HTTP activity centrally | `core/interceptors` |
 | Signals | Auth, theme, page state | Simple reactive state | `core/auth`, `core/theme`, feature pages |
-| Computed State | Dashboard and filters | Derive page summaries from loaded data | `dashboard`, list pages |
+| Computed State | Dashboard, filters, How TeamPulse Works | Derive page summaries and role-aware guide content | `dashboard`, list pages, `features/how-teampulse-works` |
 | Reactive Forms | Login and CRUD dialogs | Validated user input | `features/login`, `features/teams`, `features/members`, `features/evaluations`, `features/feedback`, `features/goals` |
 | Validators | Forms | Required fields and score/progress bounds | Feature page form builders |
 | Pipes | Scores, risk, dates | Consistent display formatting | `shared/pipes` |
@@ -32,6 +32,6 @@
 
 `authGuard` is applied to the outer authenticated shell route (the `''` path with `AppLayoutComponent`). It redirects unauthenticated users to `/login` with a `returnUrl` query parameter.
 
-`roleGuard` is applied to all business data child routes: `teams`, `teams/:id`, `members`, `members/:id`, `evaluations`, `feedback`, and `goals`. Each carries `data: { roles: ['Manager', 'TeamMember'] }`. The guard validates that the current session holds a recognised app role before loading any data page. Angular Lab routes are intentionally left without `roleGuard` so both roles and any visitor with a session can access the learning content freely.
+`roleGuard` is applied to all business data child routes: `teams`, `teams/:id`, `members`, `members/:id`, `evaluations`, `feedback`, and `goals`. It is also applied to the business guide route `how-teampulse-works`. Each carries `data: { roles: ['Manager', 'TeamMember'] }`. The guard validates that the current session holds a recognised app role before loading the page. Angular Lab routes are intentionally left without `roleGuard` so both roles and any visitor with a session can access the learning content freely.
 
 Angular Lab at `/angular-lab` and `/angular-lab/:featureId` uses this map as an in-app learning experience.

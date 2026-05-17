@@ -50,7 +50,7 @@ import { SectionCardComponent } from '../../shared/components/section-card/secti
       <tp-page-header
         eyebrow="Teams"
         title="Squad operating map"
-        subtitle="Search, compare, and maintain engineering teams using seeded Minimal API data."
+        subtitle="Search, compare, and maintain engineering teams in one visual workspace."
         [actionLabel]="isManager() ? 'Add Team' : ''"
         actionIcon="pi pi-plus"
         (action)="openCreateDialog()"

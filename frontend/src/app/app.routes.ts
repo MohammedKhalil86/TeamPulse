@@ -71,6 +71,16 @@ export const routes: Routes = [
         title: 'Goals | TeamPulse'
       },
       {
+        path: 'how-teampulse-works',
+        canActivate: [roleGuard],
+        data: { roles: ['Manager', 'TeamMember'] },
+        loadComponent: () =>
+          import('./features/how-teampulse-works/how-teampulse-works-page.component').then(
+            (m) => m.HowTeamPulseWorksPageComponent
+          ),
+        title: 'How TeamPulse Works | TeamPulse'
+      },
+      {
         path: 'angular-lab',
         loadComponent: () =>
           import('./features/angular-lab/angular-lab-page.component').then((m) => m.AngularLabPageComponent),

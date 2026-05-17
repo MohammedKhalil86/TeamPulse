@@ -17,13 +17,14 @@ import { Component, Input } from '@angular/core';
     `
       .stat-card {
         display: grid;
-        min-height: 9.5rem;
+        min-height: 9rem;
         align-content: space-between;
+        gap: var(--tp-space-2);
         border: 3px solid var(--tp-ink);
         border-radius: var(--tp-radius);
         background: linear-gradient(145deg, var(--tp-panel), color-mix(in srgb, var(--tp-accent) 12%, var(--tp-panel)));
         box-shadow: var(--tp-shadow-md);
-        padding: 1rem;
+        padding: var(--tp-space-4);
       }
 
       i {
@@ -32,23 +33,25 @@ import { Component, Input } from '@angular/core';
         background: var(--tp-hot);
         box-shadow: var(--tp-shadow-xs);
         color: #121212;
-        font-size: 1.15rem;
-        padding: 0.55rem;
+        font-size: 1.05rem;
+        padding: 0.5rem;
       }
 
       span {
         color: var(--tp-muted);
+        font-size: 0.84rem;
         font-weight: 900;
         text-transform: uppercase;
       }
 
       strong {
-        font-size: 2.5rem;
+        font-size: clamp(2rem, 3vw, 2.45rem);
         line-height: 1;
       }
 
       small {
         color: var(--tp-success);
+        font-size: 0.84rem;
         font-weight: 900;
       }
     `

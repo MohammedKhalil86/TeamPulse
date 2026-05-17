@@ -25,7 +25,7 @@ import { Component, Input } from '@angular/core';
         border-radius: var(--tp-radius);
         background: var(--tp-panel);
         box-shadow: var(--tp-shadow-md);
-        padding: 1rem;
+        padding: var(--tp-space-5);
       }
 
       .interactive {
@@ -40,7 +40,9 @@ import { Component, Input } from '@angular/core';
       }
 
       header {
-        margin-bottom: 1rem;
+        display: grid;
+        gap: var(--tp-space-2);
+        margin-bottom: var(--tp-space-5);
       }
 
       h3,
@@ -49,8 +51,9 @@ import { Component, Input } from '@angular/core';
       }
 
       p {
-        margin-top: 0.35rem;
         color: var(--tp-muted);
+        font-size: 0.96rem;
+        line-height: 1.6;
       }
 
       @media (prefers-reduced-motion: reduce) {

@@ -58,7 +58,7 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
       <tp-page-header
         eyebrow="Goals"
         title="Delivery and growth tracker"
-        [subtitle]="isManager() ? 'Manage team and member goals from seeded data.' : 'Track your own seeded goals.'"
+        [subtitle]="isManager() ? 'Manage team and member goals with clear ownership.' : 'Track your own goals and progress.'"
         [actionLabel]="isManager() ? 'Add Goal' : ''"
         actionIcon="pi pi-flag"
         (action)="openCreateDialog()"
@@ -96,7 +96,7 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
         </div>
       </tp-section-card>
 
-      <tp-section-card title="Goals Table" subtitle="Progress bars and owner context are backed by the Minimal API.">
+      <tp-section-card title="Goals Table" subtitle="Progress, ownership, status, and due dates in one sortable view.">
         @if (filteredGoals().length) {
           <p-table [value]="filteredGoals()" [paginator]="true" [rows]="10" [sortMode]="'multiple'" responsiveLayout="scroll">
             <ng-template #header>

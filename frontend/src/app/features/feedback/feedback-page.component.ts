@@ -53,7 +53,7 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
       <tp-page-header
         eyebrow="Feedback"
         title="Signals and recognition feed"
-        [subtitle]="isManager() ? 'Review and create feedback across all seeded members.' : 'Review your own feedback and team recognition.'"
+        [subtitle]="isManager() ? 'Review and create feedback across all members.' : 'Review your own feedback and team recognition.'"
         [actionLabel]="isManager() ? 'Add Feedback' : ''"
         actionIcon="pi pi-comment"
         (action)="openCreateDialog()"
@@ -94,7 +94,7 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
         }
       </section>
 
-      <tp-section-card title="Feedback Table" subtitle="The same data as a sortable workshop-friendly table.">
+      <tp-section-card title="Feedback Table" subtitle="A sortable view for scanning feedback by member, type, and date.">
         <p-table [value]="filteredFeedback()" [paginator]="true" [rows]="10" responsiveLayout="scroll">
           <ng-template #header>
             <tr><th>Member</th><th>From</th><th>Type</th><th>Message</th><th>Created</th><th>Actions</th></tr>

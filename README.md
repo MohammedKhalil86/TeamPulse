@@ -1,6 +1,6 @@
 # TeamPulse
 
-TeamPulse is an Angular workshop sample project for Atos. It is a realistic but intentionally simple engineering team management app for demonstrating Angular concepts, PrimeNG components, and frontend/backend integration.
+TeamPulse helps engineering managers and team members track goals, feedback, evaluations, skills, and team health in a simple visual workspace. The repository also supports Angular learning through docs and the in-app Learning Lab.
 
 ## Project Structure
 
@@ -81,7 +81,7 @@ Team Members:
 
 ## Main Pages
 
-- `/login`: fake login.
+- `/login`: product sign-in with sample credentials.
 - `/dashboard`: role-aware dashboard.
 - `/teams` and `/teams/:id`: teams list and detail.
 - `/members` and `/members/:id`: member directory and profile.
@@ -92,7 +92,7 @@ Team Members:
 
 ## Backend Scope
 
-The backend uses in-memory seeded data only. There is no database, Entity Framework, JWT, ASP.NET Identity, password hashing, or real authentication server.
+The backend uses in-memory sample data only. There is no database, Entity Framework, JWT, ASP.NET Identity, password hashing, or real authentication server.
 
 ## Documentation Map
 

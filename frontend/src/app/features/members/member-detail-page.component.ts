@@ -53,7 +53,7 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
       <tp-empty-state
         icon="pi pi-lock"
         title="Profile access is limited"
-        message="Team members can only view their own relevant profile data in this workshop demo."
+        message="Team members can only view profile data relevant to their role."
         actionLabel="Back to Members"
         actionIcon="pi pi-arrow-left"
         (action)="backLink.click()"
@@ -73,7 +73,7 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
       <section class="stat-grid">
         <tp-stat-card label="Performance" [value]="member.performanceScore" icon="pi pi-chart-line" trend="Profile score" />
         <tp-stat-card label="Engagement" [value]="member.engagementScore" icon="pi pi-heart" trend="Engagement signal" />
-        <tp-stat-card label="Evaluations" [value]="evaluations().length" icon="pi pi-star" trend="Seeded records" />
+        <tp-stat-card label="Evaluations" [value]="evaluations().length" icon="pi pi-star" trend="Review history" />
         <tp-stat-card label="Goals" [value]="goals().length" icon="pi pi-flag" trend="Personal goals" />
       </section>
 
@@ -89,7 +89,7 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
           </div>
         </tp-section-card>
 
-        <tp-section-card title="Skills" subtitle="Seeded skills for filtering and profile exercises.">
+        <tp-section-card title="Skills" subtitle="Skills used for team planning and profile context.">
           <div class="skill-cloud">
             @for (skill of member.skills; track skill) {
               <span>{{ skill }}</span>
@@ -128,7 +128,7 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
                 <p-progressbar [value]="goal.progress" />
               </article>
             } @empty {
-              <tp-empty-state title="No goals" message="No personal goals are seeded for this member." />
+              <tp-empty-state title="No goals" message="No personal goals are available for this member." />
             }
           </div>
         </tp-section-card>
@@ -142,7 +142,7 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
                 <small>{{ item.createdAt | friendlyDate }}</small>
               </article>
             } @empty {
-              <tp-empty-state title="No feedback" message="No feedback is seeded for this member." />
+              <tp-empty-state title="No feedback" message="No feedback is available for this member." />
             }
           </div>
         </tp-section-card>
@@ -189,8 +189,8 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
       .stat-grid,
       .profile-grid {
         display: grid;
-        gap: 1rem;
-        margin-bottom: 1rem;
+        gap: var(--tp-space-5);
+        margin-bottom: var(--tp-space-5);
       }
 
       .stat-grid {
@@ -204,22 +204,35 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
       .profile-header,
       .item-row {
         display: grid;
-        gap: 0.75rem;
+        gap: var(--tp-space-3);
         border: 2px solid var(--tp-ink);
         border-radius: var(--tp-radius-sm);
         background: color-mix(in srgb, var(--tp-accent) 8%, var(--tp-panel));
-        padding: 0.85rem;
+        padding: var(--tp-space-4);
       }
 
       .profile-header {
-        grid-template-columns: 1fr auto auto;
+        grid-template-columns: minmax(0, 1fr) auto auto;
         align-items: center;
+        column-gap: var(--tp-space-5);
+      }
+
+      .profile-header > div,
+      .item-row > div {
+        display: grid;
+        gap: var(--tp-space-1);
+        min-width: 0;
+      }
+
+      .profile-header strong,
+      .item-row strong {
+        overflow-wrap: anywhere;
       }
 
       .skill-cloud {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.65rem;
+        gap: var(--tp-space-3);
       }
 
       .skill-cloud span {
@@ -229,30 +242,30 @@ import { FriendlyDatePipe } from '../../shared/pipes/friendly-date.pipe';
         box-shadow: var(--tp-shadow-xs);
         color: #121212;
         font-weight: 900;
-        padding: 0.45rem 0.65rem;
+        padding: 0.5rem 0.7rem;
       }
 
       .stack {
         display: grid;
-        gap: 0.75rem;
-        margin-top: 0.75rem;
+        gap: var(--tp-space-3);
+        margin-top: var(--tp-space-3);
       }
 
       .note-form {
         display: grid;
-        gap: 1rem;
+        gap: var(--tp-space-4);
       }
 
       label {
         display: grid;
-        gap: 0.35rem;
+        gap: var(--tp-space-2);
         font-weight: 900;
       }
 
       .dialog-actions {
         display: flex;
         justify-content: flex-end;
-        gap: 0.75rem;
+        gap: var(--tp-space-3);
       }
 
       span,

@@ -68,14 +68,14 @@ interface TeamMemberCount {
             <tp-page-header
               eyebrow="Manager Dashboard"
               title="Engineering command center"
-              subtitle="Organization-level team health, delivery signals, goals, and feedback from the seeded Minimal API."
+              subtitle="Organization-level team health, delivery signals, goals, and feedback in one view."
               actionLabel="Review Teams"
               actionIcon="pi pi-sitemap"
               (action)="goToTeams()"
             />
 
             <section class="stat-grid">
-              <tp-stat-card label="Total Teams" [value]="dashboard.teamCount" icon="pi pi-sitemap" trend="Seeded squads" />
+              <tp-stat-card label="Total Teams" [value]="dashboard.teamCount" icon="pi pi-sitemap" trend="Active squads" />
               <tp-stat-card label="Total Members" [value]="dashboard.memberCount" icon="pi pi-users" trend="Across all teams" />
               <tp-stat-card label="Avg Health" [value]="dashboard.averageHealthScore" icon="pi pi-heart" trend="Team signal" />
               <tp-stat-card
@@ -93,91 +93,95 @@ interface TeamMemberCount {
               <tp-stat-card label="Goal Progress" [value]="goalsProgress() + '%'" icon="pi pi-flag" trend="Active goals" />
             </section>
 
-            <section class="dashboard-grid">
-              <tp-section-card title="Team Health Overview" subtitle="Health, delivery, engagement, and risk by squad.">
-                <div class="chart-shell">
-                  <p-chart type="bar" [data]="teamHealthChart()" [options]="barChartOptions" />
-                </div>
-                <div class="team-health-list">
-                  @for (team of dashboard.teams; track team.id) {
-                    <article class="team-row">
-                      <div>
-                        <strong>{{ team.name }}</strong>
-                        <span>{{ team.mission }}</span>
+            <section class="dashboard-grid manager-grid">
+              <div class="dashboard-column">
+                <tp-section-card title="Team Health Overview" subtitle="Health, delivery, engagement, and risk by squad.">
+                  <div class="chart-shell">
+                    <p-chart type="bar" [data]="teamHealthChart()" [options]="barChartOptions" />
+                  </div>
+                  <div class="team-health-list">
+                    @for (team of dashboard.teams; track team.id) {
+                      <article class="team-row">
+                        <div>
+                          <strong>{{ team.name }}</strong>
+                          <span>{{ team.mission }}</span>
+                        </div>
+                        <tp-score-badge [score]="team.healthScore" />
+                        <p-progressbar [value]="team.deliveryScore" [showValue]="false" />
+                        <tp-risk-badge [risk]="team.riskLevel" />
+                      </article>
+                    }
+                  </div>
+                </tp-section-card>
+
+                <tp-section-card title="Skills Distribution" subtitle="Top skills extracted from member profiles.">
+                  <div class="skill-cloud">
+                    @for (skill of skillsDistribution(); track skill.skill) {
+                      <span>
+                        {{ skill.skill }}
+                        <strong>{{ skill.count }}</strong>
+                      </span>
+                    }
+                  </div>
+                </tp-section-card>
+
+                <tp-section-card title="Goals Progress Summary" subtitle="Upcoming goals and completion signals.">
+                  <div class="chart-shell compact-chart">
+                    <p-chart type="doughnut" [data]="goalStatusChart()" [options]="doughnutChartOptions" />
+                  </div>
+                  <div class="goal-list">
+                    @for (goal of dashboard.upcomingGoals; track goal.id) {
+                      <article>
+                        <div>
+                          <strong>{{ goal.title }}</strong>
+                          <span>{{ goal.status }}</span>
+                        </div>
+                        <p-progressbar [value]="goal.progress" />
+                      </article>
+                    }
+                  </div>
+                </tp-section-card>
+              </div>
+
+              <div class="dashboard-column">
+                <tp-section-card title="Members by Team" subtitle="Distribution for paging, filtering, and chart exercises.">
+                  <div class="chart-shell compact-chart">
+                    <p-chart type="doughnut" [data]="membersByTeamChart()" [options]="doughnutChartOptions" />
+                  </div>
+                  <div class="bar-list">
+                    @for (item of membersByTeam(); track item.team.id) {
+                      <div class="bar-row">
+                        <span>{{ item.team.name }}</span>
+                        <div class="bar-track">
+                          <div class="bar-fill" [style.width.%]="memberBarWidth(item.count)"></div>
+                        </div>
+                        <strong>{{ item.count }}</strong>
                       </div>
-                      <tp-score-badge [score]="team.healthScore" />
-                      <p-progressbar [value]="team.deliveryScore" [showValue]="false" />
-                      <tp-risk-badge [risk]="team.riskLevel" />
-                    </article>
-                  }
-                </div>
-              </tp-section-card>
+                    }
+                  </div>
+                </tp-section-card>
 
-              <tp-section-card title="Members by Team" subtitle="Distribution for paging, filtering, and chart exercises.">
-                <div class="chart-shell compact-chart">
-                  <p-chart type="doughnut" [data]="membersByTeamChart()" [options]="doughnutChartOptions" />
-                </div>
-                <div class="bar-list">
-                  @for (item of membersByTeam(); track item.team.id) {
-                    <div class="bar-row">
-                      <span>{{ item.team.name }}</span>
-                      <div class="bar-track">
-                        <div class="bar-fill" [style.width.%]="memberBarWidth(item.count)"></div>
-                      </div>
-                      <strong>{{ item.count }}</strong>
-                    </div>
-                  }
-                </div>
-              </tp-section-card>
+                <tp-section-card title="Recent Feedback" subtitle="Latest feedback across teams.">
+                  <div class="feedback-list">
+                    @for (item of dashboard.recentFeedback; track item.id) {
+                      <article>
+                        <p-tag [value]="item.type" severity="info" />
+                        <p>{{ item.message }}</p>
+                        <small>{{ item.createdAt | friendlyDate }}</small>
+                      </article>
+                    }
+                  </div>
+                </tp-section-card>
 
-              <tp-section-card title="Skills Distribution" subtitle="Top skills extracted from member profiles.">
-                <div class="skill-cloud">
-                  @for (skill of skillsDistribution(); track skill.skill) {
-                    <span>
-                      {{ skill.skill }}
-                      <strong>{{ skill.count }}</strong>
-                    </span>
-                  }
-                </div>
-              </tp-section-card>
-
-              <tp-section-card title="Recent Feedback" subtitle="Latest seeded feedback across teams.">
-                <div class="feedback-list">
-                  @for (item of dashboard.recentFeedback; track item.id) {
-                    <article>
-                      <p-tag [value]="item.type" severity="info" />
-                      <p>{{ item.message }}</p>
-                      <small>{{ item.createdAt | friendlyDate }}</small>
-                    </article>
-                  }
-                </div>
-              </tp-section-card>
-
-              <tp-section-card title="Goals Progress Summary" subtitle="Upcoming goals and completion signals.">
-                <div class="chart-shell compact-chart">
-                  <p-chart type="doughnut" [data]="goalStatusChart()" [options]="doughnutChartOptions" />
-                </div>
-                <div class="goal-list">
-                  @for (goal of dashboard.upcomingGoals; track goal.id) {
-                    <article>
-                      <div>
-                        <strong>{{ goal.title }}</strong>
-                        <span>{{ goal.status }}</span>
-                      </div>
-                      <p-progressbar [value]="goal.progress" />
-                    </article>
-                  }
-                </div>
-              </tp-section-card>
-
-              <tp-section-card title="Quick Links" subtitle="Jump into management workflows.">
-                <div class="quick-links">
-                  <a pButton routerLink="/teams" icon="pi pi-sitemap" label="Teams"></a>
-                  <a pButton routerLink="/members" icon="pi pi-users" label="Members" severity="secondary"></a>
-                  <a pButton routerLink="/evaluations" icon="pi pi-star" label="Evaluations" severity="secondary"></a>
-                  <a pButton routerLink="/goals" icon="pi pi-flag" label="Goals" severity="secondary"></a>
-                </div>
-              </tp-section-card>
+                <tp-section-card title="Quick Links" subtitle="Jump into management workflows.">
+                  <div class="quick-links">
+                    <a pButton routerLink="/teams" icon="pi pi-sitemap" label="Teams"></a>
+                    <a pButton routerLink="/members" icon="pi pi-users" label="Members" severity="secondary"></a>
+                    <a pButton routerLink="/evaluations" icon="pi pi-star" label="Evaluations" severity="secondary"></a>
+                    <a pButton routerLink="/goals" icon="pi pi-flag" label="Goals" severity="secondary"></a>
+                  </div>
+                </tp-section-card>
+              </div>
             </section>
           </section>
         }
@@ -187,7 +191,7 @@ interface TeamMemberCount {
             <tp-page-header
               eyebrow="Team Member Dashboard"
               [title]="'Welcome back, ' + dashboard.user.fullName"
-              subtitle="Your profile, goals, feedback, evaluation signals, and workshop links in one focused cockpit."
+              subtitle="Your profile, goals, feedback, evaluation signals, and next actions in one focused workspace."
             />
 
             @if (dashboard.profile; as profile) {
@@ -204,7 +208,7 @@ interface TeamMemberCount {
               </section>
 
               <section class="dashboard-grid">
-                <tp-section-card title="Profile Summary" subtitle="Seeded member data from the backend.">
+                <tp-section-card title="Profile Summary" subtitle="Role, skills, scores, and team context.">
                   <div class="profile-panel">
                     <div>
                       <strong>{{ profile.fullName }}</strong>
@@ -215,7 +219,7 @@ interface TeamMemberCount {
                   </div>
                 </tp-section-card>
 
-                <tp-section-card title="Team Overview" subtitle="The team connected to your fake session.">
+                <tp-section-card title="Team Overview" subtitle="The team connected to your profile.">
                   @if (dashboard.team; as team) {
                     <article class="team-focus">
                       <h3>{{ team.name }}</h3>
@@ -240,7 +244,7 @@ interface TeamMemberCount {
                         <p-progressbar [value]="goal.progress" />
                       </article>
                     } @empty {
-                      <tp-empty-state title="No goals yet" message="Seeded member goals will appear here." />
+                      <tp-empty-state title="No goals yet" message="Member goals will appear here." />
                     }
                   </div>
                 </tp-section-card>
@@ -254,12 +258,12 @@ interface TeamMemberCount {
                         <small>{{ item.createdAt | friendlyDate }}</small>
                       </article>
                     } @empty {
-                      <tp-empty-state title="No feedback yet" message="Seeded feedback will appear here." />
+                      <tp-empty-state title="No feedback yet" message="Feedback will appear here." />
                     }
                   </div>
                 </tp-section-card>
 
-                <tp-section-card title="Evaluation Trend" subtitle="Score movement from seeded evaluations.">
+                <tp-section-card title="Evaluation Trend" subtitle="Score movement from evaluation history.">
                   @if (memberEvaluationChart(); as chartData) {
                     <div class="chart-shell">
                       <p-chart type="bar" [data]="chartData" [options]="barChartOptions" />
@@ -279,7 +283,7 @@ interface TeamMemberCount {
                         </div>
                       </article>
                     } @empty {
-                      <tp-empty-state title="No evaluations yet" message="Evaluation history will appear here after seeded records load." />
+                      <tp-empty-state title="No evaluations yet" message="Evaluation history will appear here when records are available." />
                     }
                   </div>
                 </tp-section-card>
@@ -292,7 +296,7 @@ interface TeamMemberCount {
                   </div>
                 </tp-section-card>
 
-                <tp-section-card title="Quick Links" subtitle="Move through the member workshop flow.">
+                <tp-section-card title="Quick Links" subtitle="Move through your most useful TeamPulse views.">
                   <div class="quick-links">
                     <a pButton [routerLink]="['/members', profile.id]" icon="pi pi-user" label="Own Profile"></a>
                     <a pButton routerLink="/dashboard" fragment="goals" icon="pi pi-flag" label="Own Goals" severity="secondary"></a>
@@ -318,19 +322,30 @@ interface TeamMemberCount {
     `
       .dashboard {
         display: grid;
-        gap: 1.25rem;
+        gap: var(--tp-space-5);
       }
 
       .stat-grid {
         display: grid;
         grid-template-columns: repeat(6, minmax(0, 1fr));
-        gap: 1rem;
+        gap: var(--tp-space-4);
       }
 
       .dashboard-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1rem;
+        gap: var(--tp-space-5);
+        align-items: start;
+      }
+
+      .manager-grid {
+        grid-template-columns: minmax(0, 1.1fr) minmax(22rem, 0.9fr);
+      }
+
+      .dashboard-column {
+        display: grid;
+        gap: var(--tp-space-5);
+        min-width: 0;
       }
 
       .team-health-list,
@@ -338,18 +353,18 @@ interface TeamMemberCount {
       .feedback-list,
       .trend-list {
         display: grid;
-        gap: 0.75rem;
+        gap: var(--tp-space-3);
       }
 
       .chart-shell {
-        min-height: 18rem;
-        margin-bottom: 1rem;
+        min-height: 17rem;
+        margin-bottom: var(--tp-space-4);
         border: 2px solid var(--tp-ink);
         border-radius: var(--tp-radius-sm);
         background:
           linear-gradient(135deg, color-mix(in srgb, var(--tp-accent) 10%, transparent), transparent 45%),
           var(--tp-surface);
-        padding: 0.75rem;
+        padding: var(--tp-space-3);
       }
 
       .compact-chart {
@@ -364,16 +379,33 @@ interface TeamMemberCount {
       .trend-list article,
       .profile-panel {
         display: grid;
-        gap: 0.75rem;
+        gap: var(--tp-space-3);
         border: 2px solid var(--tp-ink);
         border-radius: var(--tp-radius-sm);
         background: color-mix(in srgb, var(--tp-accent) 7%, var(--tp-panel));
-        padding: 0.85rem;
+        padding: var(--tp-space-4);
       }
 
       .team-row {
-        grid-template-columns: minmax(14rem, 1fr) minmax(8rem, auto) minmax(8rem, 0.65fr) auto;
+        grid-template-columns: minmax(0, 1fr) minmax(6rem, auto) minmax(5.5rem, 0.38fr) auto;
         align-items: center;
+        column-gap: var(--tp-space-4);
+      }
+
+      .team-row span {
+        display: block;
+        overflow-wrap: anywhere;
+      }
+
+      .goal-list article > div,
+      .profile-panel > div {
+        display: grid;
+        gap: var(--tp-space-1);
+        min-width: 0;
+      }
+
+      .goal-list strong {
+        overflow-wrap: anywhere;
       }
 
       strong,
@@ -394,13 +426,13 @@ interface TeamMemberCount {
 
       .bar-list {
         display: grid;
-        gap: 0.85rem;
+        gap: var(--tp-space-3);
       }
 
       .bar-row {
         display: grid;
         grid-template-columns: 8rem 1fr 2rem;
-        gap: 0.75rem;
+        gap: var(--tp-space-3);
         align-items: center;
       }
 
@@ -420,7 +452,7 @@ interface TeamMemberCount {
       .team-scores {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.65rem;
+        gap: var(--tp-space-3);
       }
 
       .skill-cloud span,
@@ -431,7 +463,7 @@ interface TeamMemberCount {
         box-shadow: var(--tp-shadow-xs);
         color: #121212;
         font-weight: 900;
-        padding: 0.45rem 0.65rem;
+        padding: 0.5rem 0.7rem;
       }
 
       .skill-cloud strong {
@@ -451,6 +483,10 @@ interface TeamMemberCount {
       @media (max-width: 1260px) {
         .stat-grid {
           grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .manager-grid {
+          grid-template-columns: 1fr;
         }
 
         .team-row {

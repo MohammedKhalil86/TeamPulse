@@ -25,8 +25,8 @@ import { ButtonModule } from 'primeng/button';
         display: flex;
         align-items: end;
         justify-content: space-between;
-        gap: 1rem;
-        margin-bottom: 1.25rem;
+        gap: var(--tp-space-5);
+        margin-bottom: var(--tp-space-5);
       }
 
       .eyebrow {
@@ -36,7 +36,7 @@ import { ButtonModule } from 'primeng/button';
         background: var(--tp-warning);
         box-shadow: var(--tp-shadow-xs);
         color: #121212;
-        font-size: 0.74rem;
+        font-size: 0.78rem;
         font-weight: 900;
         padding: 0.25rem 0.5rem;
         text-transform: uppercase;
@@ -50,9 +50,10 @@ import { ButtonModule } from 'primeng/button';
 
       .subtitle {
         max-width: 48rem;
-        margin: 0.75rem 0 0;
+        margin: var(--tp-space-3) 0 0;
         color: var(--tp-muted);
-        line-height: 1.6;
+        font-size: 1.02rem;
+        line-height: 1.65;
       }
 
       @media (max-width: 720px) {

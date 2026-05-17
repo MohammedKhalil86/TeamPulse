@@ -53,7 +53,7 @@ import { ScoreHighlightDirective } from '../../shared/directives/score-highlight
       <tp-page-header
         eyebrow="Evaluations"
         title="Performance review console"
-        [subtitle]="isManager() ? 'Create and maintain seeded evaluations.' : 'Review your own seeded evaluation history.'"
+        [subtitle]="isManager() ? 'Create and maintain evaluation records.' : 'Review your own evaluation history.'"
         [actionLabel]="isManager() ? 'Add Evaluation' : ''"
         actionIcon="pi pi-plus"
         (action)="openCreateDialog()"
@@ -65,7 +65,7 @@ import { ScoreHighlightDirective } from '../../shared/directives/score-highlight
         <tp-stat-card label="High Scores" [value]="highScoreCount()" icon="pi pi-arrow-up" trend="Average >= 85" />
       </section>
 
-      <tp-section-card title="Evaluation Records" subtitle="Scores are loaded from the Minimal API and scoped by fake role.">
+      <tp-section-card title="Evaluation Records" subtitle="Scores are organized by role and member context.">
         @if (visibleEvaluations().length) {
           <p-table [value]="visibleEvaluations()" [paginator]="true" [rows]="10" [sortMode]="'multiple'" responsiveLayout="scroll">
             <ng-template #header>

@@ -51,7 +51,7 @@ import { ScoreHighlightDirective } from '../../shared/directives/score-highlight
       <tp-page-header
         eyebrow="Members"
         title="Engineering people grid"
-        [subtitle]="isManager() ? 'Manage and filter all seeded members.' : 'View the members connected to your team.'"
+        [subtitle]="isManager() ? 'Manage, filter, and understand every member profile.' : 'View the members connected to your team.'"
         [actionLabel]="isManager() ? 'Add Member' : ''"
         actionIcon="pi pi-user-plus"
         (action)="openCreateDialog()"

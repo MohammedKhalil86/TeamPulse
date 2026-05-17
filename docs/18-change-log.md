@@ -1,5 +1,32 @@
 # Change Log
 
+## 2026-05-17 - How TeamPulse Works guide
+
+- Added the authenticated `/how-teampulse-works` business guide page.
+- Added a sidebar item named `How TeamPulse Works` before Angular Lab for both managers and team members.
+- Added role-aware guide content: managers see team health, goals, evaluations, feedback, risk signals, and a manager workflow; team members see personal goals, feedback, evaluations, skill/profile context, team health, and a personal workflow.
+- Added workflow cards, guide cards, next-action links, and a concise sample-data notice.
+- Added page-specific floating help content that references only the Angular features used by the page.
+- Updated business scope, page specifications, and Angular feature mapping docs.
+
+## 2026-05-17 - UI comfort polish
+
+- Added progressive font stacks for TeamPulse headings/logo, body text, and code labels without changing package versions or importing external fonts.
+- Improved global readability with a 16px baseline, more comfortable line-height, stronger small-text rhythm, and reusable spacing utilities for stacks, clusters, title rows, metadata, and muted text.
+- Added an expanded-by-default collapsible sidebar with compact logo, icon-only collapsed navigation, accessible labels/tooltips, mobile-safe behavior, and `teampulse.v2.sidebarCollapsed` persistence.
+- Rebalanced the manager dashboard into intentional columns so charts, lists, goals, feedback, and quick links avoid large empty visual gaps.
+- Tuned shared cards, page headers, stat cards, section cards, score badges, member detail, and team detail spacing while preserving the Neo-Brutalism/futuristic TeamPulse personality.
+- Verified the frontend build and captured browser screenshots for login, dashboard, teams, team detail, members, member detail, evaluations, feedback, goals, Angular Lab, and collapsed sidebar.
+
+## 2026-05-17 - Public UI polish
+
+- Reworked the login page into a public-facing TeamPulse product entry with business value copy, sample credentials, visible dark/light theme toggle, and a concise sample-data notice.
+- Removed workshop, fake-auth, backend/API, and seeded-data wording from normal business UI while leaving technical learning content available in Learning Lab/docs/help where appropriate.
+- Simplified the authenticated topbar by removing the workshop eyebrow and redundant fixed page title while keeping role, theme, loading, and logout controls.
+- Updated the TeamPulse logo to use a larger rectangular mark, no tagline, a more active pulse animation, spark accents, and reduced-motion support.
+- Replaced the placeholder favicon with a TeamPulse SVG favicon.
+- Updated UI design and page specification docs, plus README positioning copy.
+
 ## 2026-05-17 - GitHub Pages build preparation
 
 - Added an Angular `github-pages` build configuration with `baseHref` set to `/TeamPulse/` for the repository path `https://github.com/MohammedKhalil86/TeamPulse`.
