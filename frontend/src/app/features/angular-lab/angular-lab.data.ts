@@ -1,10 +1,16 @@
 export type LabDifficulty = 'Beginner' | 'Intermediate' | 'Advanced';
+export type LabStatus = 'Implemented' | 'Partially implemented' | 'Conceptual' | 'Future extension';
 
 export interface AngularLabFeature {
   id: string;
   name: string;
   explanation: string;
   difficulty: LabDifficulty;
+  week: number;
+  category: string;
+  status: LabStatus;
+  statusNotes?: string;
+  codeWalkthroughIds: string[];
   pages: string[];
   pageLinks: Array<{ label: string; route: string }>;
   whyTeamPulseUsesIt: string;
@@ -14,7 +20,64 @@ export interface AngularLabFeature {
   primeNgComponents: string[];
 }
 
-export const ANGULAR_LAB_FEATURES: AngularLabFeature[] = [
+type AngularLabFeatureInput = Omit<AngularLabFeature, 'week' | 'category' | 'status' | 'statusNotes' | 'codeWalkthroughIds'> &
+  Partial<Pick<AngularLabFeature, 'week' | 'category' | 'status' | 'statusNotes' | 'codeWalkthroughIds'>>;
+
+const ANGULAR_FEATURE_METADATA: Record<string, Partial<Pick<AngularLabFeature, 'week' | 'category' | 'status' | 'statusNotes' | 'codeWalkthroughIds'>>> = {
+  'standalone-components': { week: 1, category: 'Components', status: 'Implemented', codeWalkthroughIds: ['shared-ui'] },
+  routing: { week: 1, category: 'Routing', status: 'Implemented', codeWalkthroughIds: ['app-routes'] },
+  'lazy-loading': { week: 2, category: 'Routing', status: 'Implemented', codeWalkthroughIds: ['lazy-routes'] },
+  'route-guards': { week: 2, category: 'Routing', status: 'Implemented', codeWalkthroughIds: ['auth-guards'] },
+  'role-based-ui': { week: 2, category: 'State and roles', status: 'Implemented', codeWalkthroughIds: ['role-ui'] },
+  services: { week: 2, category: 'Services and data', status: 'Implemented', codeWalkthroughIds: ['api-services'] },
+  'dependency-injection': { week: 2, category: 'Services and data', status: 'Implemented', codeWalkthroughIds: ['di'] },
+  'http-client': { week: 3, category: 'Services and data', status: 'Implemented', codeWalkthroughIds: ['http-client'] },
+  interceptors: { week: 3, category: 'Services and data', status: 'Implemented', codeWalkthroughIds: ['loading-interceptor'] },
+  signals: { week: 3, category: 'State and roles', status: 'Implemented', codeWalkthroughIds: ['signals'] },
+  'computed-state': { week: 3, category: 'State and roles', status: 'Implemented', codeWalkthroughIds: ['computed-state'] },
+  'reactive-forms': { week: 4, category: 'Forms', status: 'Implemented', codeWalkthroughIds: ['reactive-forms'] },
+  validators: { week: 4, category: 'Forms', status: 'Implemented', codeWalkthroughIds: ['validators'] },
+  pipes: { week: 4, category: 'Templates', status: 'Implemented', codeWalkthroughIds: ['pipes'] },
+  directives: { week: 4, category: 'Templates', status: 'Implemented', codeWalkthroughIds: ['directives'] },
+  'component-inputs': { week: 1, category: 'Components', status: 'Implemented', codeWalkthroughIds: ['component-inputs'] },
+  'component-outputs': { week: 1, category: 'Components', status: 'Implemented', codeWalkthroughIds: ['component-outputs'] },
+  'reusable-components': { week: 1, category: 'Components', status: 'Implemented', codeWalkthroughIds: ['reusable-components'] },
+  'primeng-components': { week: 4, category: 'UI library', status: 'Implemented', codeWalkthroughIds: ['primeng'] },
+  theming: { week: 5, category: 'UI and styling', status: 'Implemented', codeWalkthroughIds: ['theming'] },
+  'dark-light-mode': { week: 5, category: 'UI and styling', status: 'Implemented', codeWalkthroughIds: ['theme-mode'] },
+  'angular-animations': { week: 5, category: 'UI and styling', status: 'Implemented', codeWalkthroughIds: ['animations'] },
+  localstorage: { week: 5, category: 'Browser platform', status: 'Implemented', codeWalkthroughIds: ['local-storage'] },
+  'error-handling': { week: 5, category: 'Application quality', status: 'Implemented', codeWalkthroughIds: ['error-handling'] },
+  'loading-states': { week: 5, category: 'Application quality', status: 'Implemented', codeWalkthroughIds: ['loading-states'] }
+};
+
+function normalizeLearningRoute(route: string): string {
+  if (route === '/angular-lab') {
+    return '/learning/angular';
+  }
+
+  if (route.startsWith('/angular-lab/')) {
+    return route.replace('/angular-lab/', '/learning/angular/');
+  }
+
+  return route;
+}
+
+function normalizeFeature(feature: AngularLabFeatureInput): AngularLabFeature {
+  const metadata = ANGULAR_FEATURE_METADATA[feature.id] ?? {};
+
+  return {
+    ...feature,
+    pageLinks: feature.pageLinks.map((link) => ({ ...link, route: normalizeLearningRoute(link.route) })),
+    week: feature.week ?? metadata.week ?? 1,
+    category: feature.category ?? metadata.category ?? 'Angular fundamentals',
+    status: feature.status ?? metadata.status ?? 'Implemented',
+    statusNotes: feature.statusNotes ?? metadata.statusNotes,
+    codeWalkthroughIds: feature.codeWalkthroughIds ?? metadata.codeWalkthroughIds ?? []
+  };
+}
+
+const EXISTING_ANGULAR_LAB_FEATURES: AngularLabFeatureInput[] = [
   {
     id: 'standalone-components',
     name: 'Standalone Components',
@@ -33,7 +96,7 @@ export const ANGULAR_LAB_FEATURES: AngularLabFeature[] = [
     name: 'Routing',
     explanation: 'Angular Router maps URLs to pages and detail routes.',
     difficulty: 'Beginner',
-    pages: ['Dashboard', 'Teams', 'Members', 'Angular Lab'],
+    pages: ['Dashboard', 'Teams', 'Members', 'Learning Lab'],
     pageLinks: [
       { label: 'Teams', route: '/teams' },
       { label: 'Members', route: '/members' }
@@ -50,7 +113,7 @@ export const ANGULAR_LAB_FEATURES: AngularLabFeature[] = [
     explanation: 'Feature pages are loaded only when a route needs them.',
     difficulty: 'Intermediate',
     pages: ['All feature routes'],
-    pageLinks: [{ label: 'Angular Lab', route: '/angular-lab' }],
+    pageLinks: [{ label: 'Angular learning', route: '/learning/angular' }],
     whyTeamPulseUsesIt: 'Workshop pages stay separated and route chunks stay focused.',
     components: ['app.routes.ts'],
     snippet: "loadComponent: () => import('./features/goals/goals-page.component').then((m) => m.GoalsPageComponent)",
@@ -350,6 +413,246 @@ export const ANGULAR_LAB_FEATURES: AngularLabFeature[] = [
     primeNgComponents: ['Skeleton', 'ProgressSpinner']
   }
 ];
+
+const ROADMAP_ANGULAR_FEATURES: AngularLabFeatureInput[] = [
+  {
+    id: 'angular-cli',
+    name: 'Angular CLI',
+    explanation: 'The Angular CLI creates, serves, builds, and configures Angular projects.',
+    difficulty: 'Beginner',
+    week: 1,
+    category: 'Tooling',
+    status: 'Partially implemented',
+    statusNotes: 'TeamPulse already uses Angular CLI commands; a deeper walkthrough will be added later.',
+    codeWalkthroughIds: [],
+    pages: ['Learning Lab', 'Project setup'],
+    pageLinks: [{ label: 'Angular learning', route: '/learning/angular' }],
+    whyTeamPulseUsesIt: 'The project is built and served through Angular CLI scripts so learners use the same tooling they will use in real projects.',
+    components: ['angular.json', 'package.json'],
+    snippet: 'npm run start\nnpm run build',
+    diagram: 'Command -> Angular CLI -> dev server or production build',
+    primeNgComponents: []
+  },
+  {
+    id: 'npm-npx',
+    name: 'npm / npx',
+    explanation: 'npm installs and runs package scripts; npx executes package binaries when needed.',
+    difficulty: 'Beginner',
+    week: 1,
+    category: 'Tooling',
+    status: 'Partially implemented',
+    statusNotes: 'TeamPulse uses npm scripts; package-management teaching notes will be expanded later.',
+    codeWalkthroughIds: [],
+    pages: ['Project setup'],
+    pageLinks: [{ label: 'Angular learning', route: '/learning/angular' }],
+    whyTeamPulseUsesIt: 'Learners run the frontend through package scripts without changing package versions during guided steps.',
+    components: ['package.json', 'package-lock.json'],
+    snippet: 'npm run build',
+    diagram: 'npm script -> local Angular CLI binary -> build output',
+    primeNgComponents: []
+  },
+  {
+    id: 'project-structure',
+    name: 'Project Structure',
+    explanation: 'Angular projects are organized by features, core services, shared UI, styles, and environment configuration.',
+    difficulty: 'Beginner',
+    week: 1,
+    category: 'Architecture',
+    status: 'Implemented',
+    statusNotes: 'The TeamPulse frontend already follows a feature/core/shared structure.',
+    codeWalkthroughIds: [],
+    pages: ['Whole app'],
+    pageLinks: [{ label: 'Dashboard', route: '/dashboard' }],
+    whyTeamPulseUsesIt: 'The structure keeps business features separate while sharing auth, API, storage, layout, and visual components.',
+    components: ['core', 'features', 'shared', 'styles'],
+    snippet: 'src/app/core\nsrc/app/features\nsrc/app/shared',
+    diagram: 'core services + shared UI -> feature pages',
+    primeNgComponents: []
+  },
+  {
+    id: 'typescript-essentials',
+    name: 'TypeScript Essentials',
+    explanation: 'Types, interfaces, unions, and typed function signatures make Angular code safer and easier to navigate.',
+    difficulty: 'Beginner',
+    week: 1,
+    category: 'TypeScript',
+    status: 'Implemented',
+    statusNotes: 'TeamPulse models and feature components already use typed entities and unions.',
+    codeWalkthroughIds: [],
+    pages: ['All feature pages'],
+    pageLinks: [{ label: 'Members', route: '/members' }],
+    whyTeamPulseUsesIt: 'Shared TeamPulse models keep API services, forms, and templates aligned.',
+    components: ['team-pulse.models.ts', 'Feature components'],
+    snippet: "export type AppRole = 'Manager' | 'TeamMember';",
+    diagram: 'Model type -> service response -> component state -> template',
+    primeNgComponents: []
+  },
+  {
+    id: 'templates',
+    name: 'Templates',
+    explanation: 'Templates bind component state to HTML, Angular control flow, and child components.',
+    difficulty: 'Beginner',
+    week: 2,
+    category: 'Templates',
+    status: 'Implemented',
+    codeWalkthroughIds: [],
+    pages: ['All feature pages'],
+    pageLinks: [{ label: 'Goals', route: '/goals' }],
+    whyTeamPulseUsesIt: 'The app uses template control flow to show loading, empty, role-aware, and data-driven states.',
+    components: ['DashboardPageComponent', 'GoalsPageComponent'],
+    snippet: '@if (loading()) { <tp-loading-state /> } @else { ... }',
+    diagram: 'Component state -> template control flow -> visible UI',
+    primeNgComponents: ['Button', 'Table', 'Tag']
+  },
+  {
+    id: 'bindings',
+    name: 'Bindings',
+    explanation: 'Property, event, class, and attribute bindings connect template markup to component state and actions.',
+    difficulty: 'Beginner',
+    week: 2,
+    category: 'Templates',
+    status: 'Implemented',
+    codeWalkthroughIds: [],
+    pages: ['All feature pages'],
+    pageLinks: [{ label: 'Teams', route: '/teams' }],
+    whyTeamPulseUsesIt: 'Bindings drive filters, form controls, buttons, aria labels, theme buttons, and route links.',
+    components: ['AppLayoutComponent', 'Feature pages'],
+    snippet: '[routerLink]="item.route" (click)="toggleSidebar()"',
+    diagram: 'Template binding -> component property or method',
+    primeNgComponents: ['Button', 'Select']
+  },
+  {
+    id: 'change-detection',
+    name: 'Change Detection',
+    explanation: 'Change detection updates rendered views when state changes.',
+    difficulty: 'Intermediate',
+    week: 3,
+    category: 'State and roles',
+    status: 'Partially implemented',
+    statusNotes: 'TeamPulse uses zoneless change detection and signals; a focused lesson will be added later.',
+    codeWalkthroughIds: [],
+    pages: ['Whole app'],
+    pageLinks: [{ label: 'Dashboard', route: '/dashboard' }],
+    whyTeamPulseUsesIt: 'Signals and computed values keep UI updates explicit as filters, loaded data, theme, and session state change.',
+    components: ['app.config.ts', 'Feature pages'],
+    snippet: 'provideZonelessChangeDetection()',
+    diagram: 'Signal update -> dependency tracking -> template refresh',
+    primeNgComponents: []
+  },
+  {
+    id: 'rxjs',
+    name: 'RxJS',
+    explanation: 'RxJS represents asynchronous streams and operators for HTTP workflows.',
+    difficulty: 'Intermediate',
+    week: 3,
+    category: 'Services and data',
+    status: 'Implemented',
+    statusNotes: 'TeamPulse uses Observable-based HTTP services and operators for loading flows.',
+    codeWalkthroughIds: [],
+    pages: ['Dashboard', 'Members', 'Details'],
+    pageLinks: [{ label: 'Dashboard', route: '/dashboard' }],
+    whyTeamPulseUsesIt: 'HTTP services return Observables, and detail pages combine multiple requests where needed.',
+    components: ['DashboardPageComponent', 'MemberDetailPageComponent', 'API services'],
+    snippet: 'forkJoin({ member, evaluations, goals, feedback })',
+    diagram: 'Observable request(s) -> subscription -> signal update',
+    primeNgComponents: []
+  },
+  {
+    id: 'deployment',
+    name: 'Deployment',
+    explanation: 'Deployment prepares the Angular app for static hosting with the correct base path and built assets.',
+    difficulty: 'Intermediate',
+    week: 6,
+    category: 'Deployment',
+    status: 'Partially implemented',
+    statusNotes: 'GitHub Pages build preparation exists; deeper publishing guidance belongs in the Run Locally and deployment lessons.',
+    codeWalkthroughIds: [],
+    pages: ['Build output'],
+    pageLinks: [{ label: 'Angular learning', route: '/learning/angular' }],
+    whyTeamPulseUsesIt: 'The app can be built for a repository path while preserving local development.',
+    components: ['angular.json', 'package.json', 'scripts/create-github-pages-404.mjs'],
+    snippet: 'npm run build:github-pages',
+    diagram: 'Angular build -> dist output -> static host',
+    primeNgComponents: []
+  },
+  {
+    id: 'ngrx',
+    name: 'NgRx',
+    explanation: 'NgRx is a state management library for larger Angular applications.',
+    difficulty: 'Advanced',
+    week: 6,
+    category: 'Future architecture',
+    status: 'Future extension',
+    statusNotes: 'TeamPulse currently uses services, signals, and computed state instead of NgRx.',
+    codeWalkthroughIds: [],
+    pages: ['Future extension'],
+    pageLinks: [{ label: 'Angular learning', route: '/learning/angular' }],
+    whyTeamPulseUsesIt: 'NgRx is useful to discuss as an option for larger state graphs, but it is not needed for the current app size.',
+    components: [],
+    snippet: 'No NgRx store is implemented in TeamPulse v2.',
+    diagram: 'Action -> reducer/effect -> store -> selector',
+    primeNgComponents: []
+  },
+  {
+    id: 'graphql',
+    name: 'GraphQL',
+    explanation: 'GraphQL lets clients request shaped data from a graph-oriented API.',
+    difficulty: 'Advanced',
+    week: 6,
+    category: 'Future architecture',
+    status: 'Future extension',
+    statusNotes: 'TeamPulse currently uses REST-style API services.',
+    codeWalkthroughIds: [],
+    pages: ['Future extension'],
+    pageLinks: [{ label: 'Angular learning', route: '/learning/angular' }],
+    whyTeamPulseUsesIt: 'GraphQL can be compared with REST later, but the current learner path keeps the API surface simple.',
+    components: [],
+    snippet: 'No GraphQL client is implemented in TeamPulse v2.',
+    diagram: 'Component -> GraphQL query -> graph response',
+    primeNgComponents: []
+  },
+  {
+    id: 'ssr-ssg',
+    name: 'SSR / SSG',
+    explanation: 'Server-side rendering and static generation can improve first-load behavior and crawlability for some Angular apps.',
+    difficulty: 'Advanced',
+    week: 6,
+    category: 'Future architecture',
+    status: 'Future extension',
+    statusNotes: 'TeamPulse currently uses a client-rendered Angular app.',
+    codeWalkthroughIds: [],
+    pages: ['Future extension'],
+    pageLinks: [{ label: 'Angular learning', route: '/learning/angular' }],
+    whyTeamPulseUsesIt: 'SSR and SSG are useful architectural options, but the current GitHub Pages path is static client rendering.',
+    components: [],
+    snippet: 'No Angular SSR server is implemented in TeamPulse v2.',
+    diagram: 'Request -> server/static render -> hydrated Angular app',
+    primeNgComponents: []
+  },
+  {
+    id: 'angular-cli-vs-nx',
+    name: 'Angular CLI vs Nx',
+    explanation: 'Angular CLI is the standard Angular tooling path; Nx adds monorepo orchestration and advanced workspace tooling.',
+    difficulty: 'Intermediate',
+    week: 6,
+    category: 'Tooling',
+    status: 'Conceptual',
+    statusNotes: 'TeamPulse uses Angular CLI only; Nx is included as a comparison topic.',
+    codeWalkthroughIds: [],
+    pages: ['Learning Lab'],
+    pageLinks: [{ label: 'Angular learning', route: '/learning/angular' }],
+    whyTeamPulseUsesIt: 'Learners should understand when standard Angular CLI is enough and when Nx may be useful.',
+    components: ['angular.json', 'package.json'],
+    snippet: 'TeamPulse is not an Nx workspace.',
+    diagram: 'Angular CLI app vs Nx workspace',
+    primeNgComponents: []
+  }
+];
+
+export const ANGULAR_LAB_FEATURES: AngularLabFeature[] = [
+  ...EXISTING_ANGULAR_LAB_FEATURES,
+  ...ROADMAP_ANGULAR_FEATURES
+].map(normalizeFeature);
 
 export function findLabFeature(id: string | null): AngularLabFeature | undefined {
   return ANGULAR_LAB_FEATURES.find((feature) => feature.id === id);

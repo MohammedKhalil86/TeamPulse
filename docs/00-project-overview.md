@@ -25,7 +25,7 @@ The app models a small engineering organization with managers, teams, team membe
 | Evaluations | `/evaluations` | Evaluation review and manager CRUD |
 | Feedback | `/feedback` | Feedback feed and creation |
 | Goals | `/goals` | Team/member goals and progress |
-| Angular Lab | `/angular-lab`, `/angular-lab/:featureId` | Map Angular concepts to real app pages |
+| Learning Lab | `/learning/angular`, `/learning/angular/:featureId` | Map Angular concepts and roadmap topics to real app pages |
 
 ## Non-Goals
 

@@ -50,6 +50,6 @@ Static hosting setup:
 | Evaluations | View/create/edit/delete | Own evaluations only |
 | Feedback | View all, create/delete | Own feedback and team recognition |
 | Goals | Manage team/member goals | Own goals |
-| Angular Lab | Full access | Full access |
+| Learning Lab | Full access | Full access |
 
 The backend does not enforce production authorization. The authenticated shell is protected by `AuthGuard`; the `RoleGuard` exists for route-level role restrictions when needed, while the current business pages mostly demonstrate role behavior through navigation, scoped data, and conditional UI actions.

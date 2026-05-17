@@ -1,9 +1,49 @@
 # Change Log
 
+## 2026-05-17 - Floating help system upgrade
+
+- Replaced the simple four-section help dialog with a richer learning popup.
+- Created `core/help/help.data.ts` with a `PageHelpEntry` model and full entries for all 12 covered pages: Dashboard, Teams, Team Detail, Members, Member Profile, Evaluations, Feedback, Goals, How TeamPulse Works, Learning/Angular, Learning/MCP Servers, and Learning/Run Locally.
+- Created `core/help/help.service.ts` — a `providedIn: 'root'` service that watches `NavigationEnd` events and exposes `currentEntry` as a `computed()` signal backed by `HelpService`.
+- Rewrote `FloatingHelpComponent` as a self-contained component that injects `HelpService` directly; no inputs from `AppLayoutComponent` are needed.
+- Added hover tooltip (`pTooltip="Explain the Angular magic behind this page"`, `tooltipPosition="left"`) using `TooltipModule` from `primeng/tooltip` (already part of PrimeNG 21 — no new package added).
+- Popup is now `min(64rem, calc(100vw - 2rem))` wide with `max-height: 78vh` scrollable content.
+- Added learner level selector: Beginner / Intermediate / Advanced. Angular features and code snippets are filtered cumulatively — Intermediate shows Beginner + Intermediate content.
+- Added five tabs: Overview (business purpose, user actions, PrimeNG components), Angular (filtered feature list with page-specific notes), Code (actual project snippets or honest placeholder), Diagram (text architecture model), Related Lab (links to `/learning/angular/:id`).
+- Each Angular feature entry includes a `labId` that matches `AngularLabFeature.id` in `angular-lab.data.ts`, linking the help popup directly to the Learning Lab explorer.
+- Angular features listed in page help are limited to `Implemented` and `Partially implemented` status only — conceptual-only features are not surfaced in help.
+- Removed the entire `helpContent` computed signal from `AppLayoutComponent` (~130 lines); the shell template now uses `<tp-floating-help />` with no bindings.
+- Updated `docs/12-floating-help-system.md` with full architecture, content model, and addition guide.
+- Updated `docs/10-angular-feature-to-page-map.md` with `HelpService` reference.
+- Verified `npm run build` succeeds.
+
+## 2026-05-17 - Learning Lab child pages: MCP Servers and Run Locally
+
+- Replaced the MCP Servers and Run Locally placeholder components with full Learning Lab pages.
+- MCP Servers page (`/learning/mcp-servers`) covers five development-time MCP servers: Angular CLI MCP, PrimeNG MCP, GitHub MCP Server, Context7, and Playwright MCP. Each entry includes what it is, why it helps, TeamPulse development use, setup idea, example prompt, common mistakes, safety notes, and an AI tools comparison (Claude Code, Codex, GitHub Copilot).
+- Run Locally page (`/learning/run-locally`) covers local API and frontend setup, GitHub Pages static build explanation, build commands, and a troubleshooting accordion (node not found, npm install failures, weak password warning, stale localStorage, GitHub Pages 404 fallback).
+- Both pages use the existing shared component and PrimeNG patterns: `PageHeaderComponent`, `SectionCardComponent`, `p-tabs`, `p-panel`, `p-accordion`, `p-tag`.
+- Updated floating help content for both pages in `AppLayoutComponent`.
+- Updated `docs/13-learning-lab.md` with full MCP Servers and Run Locally documentation.
+- Updated `docs/15-ai-coding-agent-guidelines.md` with MCP Server rules.
+- Deleted the placeholder `LearningPlaceholderPageComponent`; routes now load the real components.
+- Verified `npm run build` succeeds.
+
+## 2026-05-17 - Learning Lab route restructure
+
+- Restructured the sidebar into a Learning Lab group with Angular, MCP Servers, and Run Locally child pages.
+- Moved the Angular learning experience to `/learning/angular` and `/learning/angular/:featureId` while preserving the existing Angular feature entries.
+- Added redirects from `/angular-lab` to `/learning/angular` and `/angular-lab/:featureId` to `/learning/angular/:featureId`.
+- Added placeholder Learning Lab pages for MCP Servers and Run Locally without deep content.
+- Added Angular learning metadata for week, category, status, status notes, and future code walkthrough IDs.
+- Added filters for search, week, difficulty, category, and status.
+- Added roadmap/course entries for Angular CLI, npm/npx, project structure, TypeScript essentials, templates, bindings, change detection, RxJS, deployment, NgRx, GraphQL, SSR/SSG, and Angular CLI vs Nx.
+- Updated Learning Lab, feature map, page specification, floating help, business scope, and project overview docs.
+
 ## 2026-05-17 - How TeamPulse Works guide
 
 - Added the authenticated `/how-teampulse-works` business guide page.
-- Added a sidebar item named `How TeamPulse Works` before Angular Lab for both managers and team members.
+- Added a sidebar item named `How TeamPulse Works` before the learning area for both managers and team members.
 - Added role-aware guide content: managers see team health, goals, evaluations, feedback, risk signals, and a manager workflow; team members see personal goals, feedback, evaluations, skill/profile context, team health, and a personal workflow.
 - Added workflow cards, guide cards, next-action links, and a concise sample-data notice.
 - Added page-specific floating help content that references only the Angular features used by the page.
@@ -85,7 +125,7 @@ Applied all fixes from the comprehensive project review.
 - `docs/14-primeng-usage.md`: added explicit section clarifying that PrimeNG MCP is development-time assistance only and TeamPulse has no runtime AI feature.
 - `docs/12-floating-help-system.md`: documented why help content is centralised in `AppLayoutComponent` rather than distributed across feature pages; added `FloatingHelpComponent` `input()` API usage examples.
 - `docs/10-angular-feature-to-page-map.md`: updated Route Guards row to accurately reflect `roleGuard` wiring; updated Component Inputs row to mention `input()` signal API; added route guard detail section; added reduced-motion animation note.
-- `docs/13-angular-lab.md`: added note about `input()` signal API usage in detail page and `FloatingHelpComponent`.
+- `docs/13-learning-lab.md`: added note about `input()` signal API usage in detail page and `FloatingHelpComponent`.
 - `README.md`: replaced overly specific Node/npm version pin with minimum/recommended version guidance.
 - Follow-up review cleanup: added manager dashboard API error handling so loading clears on manager dashboard failures, and removed the root `AppComponent` no-op theme signal read while still instantiating `ThemeService`.
 

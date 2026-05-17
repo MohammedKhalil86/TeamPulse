@@ -7,7 +7,7 @@ PrimeNG is the main component library for TeamPulse. The app customizes PrimeNG 
 | PrimeNG Component | Used In |
 | --- | --- |
 | Button | Login, shell, all action pages |
-| Card | Dashboard, Feedback, Angular Lab |
+| Card | Dashboard, Feedback, Learning Lab |
 | Dialog | Teams, Members, Evaluations, Feedback, Goals, Floating Help |
 | Table/DataTable | Teams, Members, Evaluations, Goals, detail sections |
 | Select/Dropdown | Login, filters, forms |
@@ -17,9 +17,9 @@ PrimeNG is the main component library for TeamPulse. The app customizes PrimeNG 
 | Tag | Risk, status, type, role, lab difficulty |
 | ProgressBar | Dashboard and Goals |
 | Chart | Dashboard charts backed by Chart.js |
-| Tabs | Angular Lab details and member-style sections where useful |
-| Accordion | Angular Lab detail supporting content |
-| Panel | Angular Lab details |
+| Tabs | Learning Lab Angular details and member-style sections where useful |
+| Accordion | Learning Lab Angular detail supporting content |
+| Panel | Learning Lab Angular details |
 | Toast | Save/delete feedback on form-heavy pages |
 | Skeleton/Spinner patterns | Loading state component |
 

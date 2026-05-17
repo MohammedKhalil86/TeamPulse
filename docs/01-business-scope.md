@@ -22,7 +22,7 @@ TeamPulse represents a lightweight engineering team management platform. The bus
 - Role-aware business guide: How TeamPulse Works.
 - Theme switching.
 - Floating page help.
-- Angular Lab learning map.
+- Learning Lab with Angular learning, MCP Servers placeholder, and Run Locally placeholder.
 
 ## How TeamPulse Works Guide
 

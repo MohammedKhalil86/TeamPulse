@@ -1,6 +1,6 @@
 # Demo Script
 
-Use this script for a practical workshop walkthrough. Recommended order: Manager flow first, then Team Member flow, then a short code walkthrough using Angular Lab.
+Use this script for a practical workshop walkthrough. Recommended order: Manager flow first, then Team Member flow, then a short code walkthrough using Learning Lab / Angular.
 
 ## Manager Flow
 
@@ -35,7 +35,7 @@ Use this script for a practical workshop walkthrough. Recommended order: Manager
    - Show progress bars and statuses.
 11. Switch dark/light theme.
 12. Open floating help and explain page-level learning content.
-13. Open Angular Lab:
+13. Open Learning Lab / Angular:
    - Search for a feature.
    - Open a detail page.
    - Follow links back to real app pages.
@@ -51,7 +51,7 @@ Use this script for a practical workshop walkthrough. Recommended order: Manager
 3. Open Teams and Members to show limited/read-only behavior.
 4. Open own Member Profile.
 5. Open Evaluations, Feedback, and Goals to show own-scoped data.
-6. Show Angular Lab is still available.
+6. Show Learning Lab is still available.
 7. Logout.
 
 The demo should emphasize that role restrictions are frontend workshop behavior, not production security.

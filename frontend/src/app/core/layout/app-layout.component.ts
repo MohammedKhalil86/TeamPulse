@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../auth/auth.service';
 import { LoadingService } from '../interceptors/loading.service';
@@ -13,8 +14,9 @@ import { routeTransition } from '../../shared/animations/route-transition.animat
 interface NavItem {
   label: string;
   icon: string;
-  route: string;
+  route?: string;
   managerOnly?: boolean;
+  children?: NavItem[];
 }
 
 @Component({
@@ -39,11 +41,33 @@ interface NavItem {
           ></button>
         </div>
         <nav aria-label="Primary navigation">
-          @for (item of visibleNavItems(); track item.route) {
-            <a [routerLink]="item.route" routerLinkActive="active" [attr.aria-label]="item.label" [title]="sidebarCollapsed() ? item.label : null">
-              <i [class]="item.icon"></i>
-              <span>{{ item.label }}</span>
-            </a>
+          @for (item of visibleNavItems(); track item.label) {
+            @if (item.children?.length) {
+              <div class="nav-group" [class.active-group]="isNavItemActive(item)">
+                <div class="nav-group-label" [attr.aria-label]="item.label" [title]="sidebarCollapsed() ? item.label : null">
+                  <i [class]="item.icon"></i>
+                  <span>{{ item.label }}</span>
+                </div>
+                <div class="nav-children">
+                  @for (child of item.children; track child.route) {
+                    <a
+                      [routerLink]="child.route"
+                      routerLinkActive="active"
+                      [attr.aria-label]="child.label"
+                      [title]="sidebarCollapsed() ? child.label : null"
+                    >
+                      <i [class]="child.icon"></i>
+                      <span>{{ child.label }}</span>
+                    </a>
+                  }
+                </div>
+              </div>
+            } @else {
+              <a [routerLink]="item.route" routerLinkActive="active" [attr.aria-label]="item.label" [title]="sidebarCollapsed() ? item.label : null">
+                <i [class]="item.icon"></i>
+                <span>{{ item.label }}</span>
+              </a>
+            }
           }
         </nav>
       </aside>
@@ -73,13 +97,7 @@ interface NavItem {
         </main>
       </section>
 
-      <tp-floating-help
-        [title]="pageTitle() + ' Help'"
-        [businessPurpose]="helpContent().businessPurpose"
-        [angularFeatures]="helpContent().angularFeatures"
-        [primeNgComponents]="helpContent().primeNgComponents"
-        [labEntries]="helpContent().labEntries"
-      />
+      <tp-floating-help />
     </div>
   `,
   styles: [
@@ -141,7 +159,8 @@ interface NavItem {
         gap: var(--tp-space-2);
       }
 
-      nav a {
+      nav a,
+      .nav-group-label {
         display: flex;
         align-items: center;
         gap: var(--tp-space-3);
@@ -158,9 +177,35 @@ interface NavItem {
           color var(--tp-motion-fast);
       }
 
-      nav a i {
+      nav a i,
+      .nav-group-label i {
         width: 1.15rem;
         text-align: center;
+      }
+
+      .nav-group {
+        display: grid;
+        gap: var(--tp-space-2);
+      }
+
+      .nav-group-label {
+        color: var(--tp-muted);
+        cursor: default;
+        font-size: 0.78rem;
+        min-height: 2.35rem;
+        text-transform: uppercase;
+      }
+
+      .nav-group.active-group .nav-group-label {
+        color: var(--tp-text);
+      }
+
+      .nav-children {
+        display: grid;
+        gap: var(--tp-space-2);
+        border-left: 2px solid color-mix(in srgb, var(--tp-ink) 55%, transparent);
+        margin-left: 0.55rem;
+        padding-left: 0.55rem;
       }
 
       .app-frame.sidebar-collapsed nav a {
@@ -168,7 +213,19 @@ interface NavItem {
         padding-inline: 0;
       }
 
-      .app-frame.sidebar-collapsed nav a span {
+      .app-frame.sidebar-collapsed .nav-group-label {
+        justify-content: center;
+        padding-inline: 0;
+      }
+
+      .app-frame.sidebar-collapsed .nav-children {
+        border-left: 0;
+        margin-left: 0;
+        padding-left: 0;
+      }
+
+      .app-frame.sidebar-collapsed nav a span,
+      .app-frame.sidebar-collapsed .nav-group-label span {
         position: absolute;
         width: 1px;
         height: 1px;
@@ -257,7 +314,19 @@ interface NavItem {
           padding: 0.75rem;
         }
 
-        .app-frame.sidebar-collapsed nav a span {
+        .app-frame.sidebar-collapsed .nav-group-label {
+          justify-content: flex-start;
+          padding: 0.75rem;
+        }
+
+        .app-frame.sidebar-collapsed .nav-children {
+          border-left: 2px solid color-mix(in srgb, var(--tp-ink) 55%, transparent);
+          margin-left: 0.55rem;
+          padding-left: 0.55rem;
+        }
+
+        .app-frame.sidebar-collapsed nav a span,
+        .app-frame.sidebar-collapsed .nav-group-label span {
           position: static;
           width: auto;
           height: auto;
@@ -287,6 +356,7 @@ export class AppLayoutComponent {
   protected readonly theme = inject(ThemeService);
   private readonly storage = inject(StorageService);
   private readonly router = inject(Router);
+  private readonly currentUrl = signal(this.router.url);
 
   private readonly sidebarCollapsedKey = 'teampulse.v2.sidebarCollapsed';
   protected readonly sidebarCollapsed = signal(this.storage.get<boolean>(this.sidebarCollapsedKey) ?? false);
@@ -303,7 +373,15 @@ export class AppLayoutComponent {
     { label: 'Feedback', icon: 'pi pi-comments', route: '/feedback' },
     { label: 'Goals', icon: 'pi pi-flag', route: '/goals' },
     { label: 'How TeamPulse Works', icon: 'pi pi-compass', route: '/how-teampulse-works' },
-    { label: 'Angular Lab', icon: 'pi pi-bolt', route: '/angular-lab' }
+    {
+      label: 'Learning Lab',
+      icon: 'pi pi-graduation-cap',
+      children: [
+        { label: 'Angular', icon: 'pi pi-bolt', route: '/learning/angular' },
+        { label: 'MCP Servers', icon: 'pi pi-server', route: '/learning/mcp-servers' },
+        { label: 'Run Locally', icon: 'pi pi-desktop', route: '/learning/run-locally' }
+      ]
+    }
   ];
 
   protected readonly visibleNavItems = computed(() =>
@@ -311,118 +389,19 @@ export class AppLayoutComponent {
   );
 
   protected readonly pageTitle = computed(() => {
-    const url = this.router.url.split('?')[0];
-    const current = this.navItems.find((item) => url.startsWith(item.route));
+    const url = this.currentUrl().split('?')[0];
+    const current = this.findNavItem(url);
     return current?.label ?? 'TeamPulse';
-  });
-
-  protected readonly helpContent = computed(() => {
-    const url = this.router.url.split('?')[0];
-
-    if (url === '/dashboard') {
-      return {
-        businessPurpose:
-          'The dashboard adapts by role: managers see team and organization signals, while team members see their own profile, goals, feedback, and evaluation data.',
-        angularFeatures: ['Role-based rendering', 'API services', 'Signals', 'Computed values', 'Conditional templates'],
-        primeNgComponents: ['Button', 'ProgressBar', 'Tag', 'Dialog', 'Dashboard cards'],
-        labEntries: ['Role-based UI', 'HttpClient services', 'Signals and computed values', 'Shared stat-card usage']
-      };
-    }
-
-    if (url === '/teams') {
-      return {
-        businessPurpose: 'The Teams page compares squads and lets managers maintain team records while team members browse read-only data.',
-        angularFeatures: ['Reactive Forms', 'Signals', 'Computed filters', 'Role-based actions', 'HTTP CRUD services'],
-        primeNgComponents: ['Table', 'Dialog', 'Select', 'InputNumber', 'Textarea', 'Button'],
-        labEntries: ['Reactive forms', 'PrimeNG dialogs', 'Role-based UI', 'Table filtering']
-      };
-    }
-
-    if (url.startsWith('/teams/')) {
-      return {
-        businessPurpose: 'Team Detail brings together team overview, members, goals, feedback, and risk highlights for one squad.',
-        angularFeatures: ['Route parameters', 'forkJoin', 'Signals', 'Computed summaries', 'Reusable components'],
-        primeNgComponents: ['Table', 'ProgressBar', 'Tag', 'Button'],
-        labEntries: ['Route params', 'Composition with shared components', 'API aggregation']
-      };
-    }
-
-    if (url === '/members') {
-      return {
-        businessPurpose: 'The Members page demonstrates a realistic people directory with paging, sorting, filtering, and manager-only maintenance actions.',
-        angularFeatures: ['Reactive Forms', 'Signals', 'Computed filters', 'Role-based lists', 'HTTP CRUD services'],
-        primeNgComponents: ['Table', 'Dialog', 'Select', 'InputNumber', 'Button'],
-        labEntries: ['DataTable pagination', 'Global search', 'Role-based filtering', 'Reactive forms']
-      };
-    }
-
-    if (url.startsWith('/members/')) {
-      return {
-        businessPurpose: 'Member Profile focuses on one engineer with skills, scores, evaluations, goals, feedback, and manager 1:1 notes.',
-        angularFeatures: ['Route parameters', 'Role checks', 'forkJoin', 'Reactive Forms', 'Signals'],
-        primeNgComponents: ['Table', 'Dialog', 'Textarea', 'ProgressBar', 'Tag'],
-        labEntries: ['Route params', 'Master detail pages', 'Manager-only actions', 'Form dialogs']
-      };
-    }
-
-    if (url === '/evaluations') {
-      return {
-        businessPurpose: 'Evaluations let managers maintain review scores while team members review only their own evaluation history.',
-        angularFeatures: ['Reactive Forms', 'Validators', 'Role-scoped rendering', 'Signals', 'HTTP CRUD services'],
-        primeNgComponents: ['Table', 'Dialog', 'Select', 'Slider', 'InputNumber', 'Textarea', 'Toast'],
-        labEntries: ['Reactive forms validation', 'Manager-only actions', 'Score indicators', 'Toast feedback']
-      };
-    }
-
-    if (url === '/feedback') {
-      return {
-        businessPurpose: 'Feedback captures recognition, improvement, risk, and general coaching signals across the workspace.',
-        angularFeatures: ['Computed filters', 'Role-scoped lists', 'Reactive Forms', 'Signals', 'HTTP services'],
-        primeNgComponents: ['Card', 'Table', 'Dialog', 'Select', 'DatePicker', 'Textarea', 'Tag', 'Toast'],
-        labEntries: ['List filtering', 'Role-aware views', 'Dialog forms', 'PrimeNG tags']
-      };
-    }
-
-    if (url === '/goals') {
-      return {
-        businessPurpose: 'Goals track team and member progress, showing managers editable goals and team members their own goals.',
-        angularFeatures: ['Reactive Forms', 'Validators', 'Computed summaries', 'Signals', 'Role-based actions'],
-        primeNgComponents: ['Table', 'Dialog', 'Select', 'DatePicker', 'InputNumber', 'ProgressBar', 'Tag', 'Toast'],
-        labEntries: ['Progress UI', 'Owner filters', 'Reactive form dialogs', 'Computed state']
-      };
-    }
-
-    if (url === '/how-teampulse-works') {
-      return {
-        businessPurpose:
-          'How TeamPulse Works gives managers and team members a role-aware guide for reading health, goals, feedback, evaluations, and risk signals.',
-        angularFeatures: ['Lazy route', 'Route guard', 'Signals', 'Computed role-aware content', 'Router links'],
-        primeNgComponents: ['Button', 'Tag'],
-        labEntries: ['Routing', 'Route guards', 'Signals and computed values', 'Role-based UI']
-      };
-    }
-
-    if (url === '/angular-lab' || url.startsWith('/angular-lab/')) {
-      return {
-        businessPurpose:
-          'Angular Lab maps TeamPulse business pages to Angular concepts so workshop attendees can learn from the actual app they are using.',
-        angularFeatures: ['Feature map', 'Route parameters', 'Reusable components', 'Project snippets', 'Concept-to-page links'],
-        primeNgComponents: ['Card', 'Tabs', 'Accordion', 'Panel', 'Tag', 'Button', 'Table'],
-        labEntries: ['Use the grid to choose a concept', 'Open details for examples', 'Follow links to pages that demonstrate the concept']
-      };
-    }
-
-    return {
-      businessPurpose: `Use ${this.pageTitle()} to explore TeamPulse workflows and sample workspace data.`,
-      angularFeatures: ['Standalone components', 'Router', 'Route guards', 'Signals', 'HttpClient'],
-      primeNgComponents: ['Button', 'Tag', 'Dialog', 'Table', 'Card'],
-      labEntries: ['Routing', 'HttpClient', 'PrimeNG']
-    };
   });
 
   protected logout(): void {
     this.auth.logout();
     this.router.navigateByUrl('/login');
+  }
+
+  protected isNavItemActive(item: NavItem): boolean {
+    const url = this.currentUrl().split('?')[0];
+    return !!item.children?.some((child) => child.route && url.startsWith(child.route));
   }
 
   protected toggleSidebar(): void {
@@ -431,5 +410,27 @@ export class AppLayoutComponent {
       this.storage.set(this.sidebarCollapsedKey, next);
       return next;
     });
+  }
+
+  private findNavItem(url: string): NavItem | undefined {
+    for (const item of this.navItems) {
+      if (item.route && url.startsWith(item.route)) {
+        return item;
+      }
+
+      const child = item.children?.find((navChild) => navChild.route && url.startsWith(navChild.route));
+
+      if (child) {
+        return child;
+      }
+    }
+
+    return undefined;
+  }
+
+  constructor() {
+    this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event) => this.currentUrl.set(event.urlAfterRedirects));
   }
 }

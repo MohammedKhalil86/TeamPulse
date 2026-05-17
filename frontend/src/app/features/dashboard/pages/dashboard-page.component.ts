@@ -308,7 +308,7 @@ interface TeamMemberCount {
                       label="Own Feedback"
                       severity="secondary"
                     ></a>
-                    <a pButton routerLink="/angular-lab" icon="pi pi-bolt" label="Angular Lab" severity="secondary"></a>
+                    <a pButton routerLink="/learning/angular" icon="pi pi-bolt" label="Learning Lab" severity="secondary"></a>
                   </div>
                 </tp-section-card>
               </section>

@@ -9,7 +9,7 @@ import { TagModule } from 'primeng/tag';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { SectionCardComponent } from '../../shared/components/section-card/section-card.component';
-import { ANGULAR_LAB_FEATURES, findLabFeature, LabDifficulty } from './angular-lab.data';
+import { ANGULAR_LAB_FEATURES, findLabFeature, LabDifficulty, LabStatus } from './angular-lab.data';
 
 @Component({
   selector: 'tp-angular-lab-detail-page',
@@ -29,21 +29,33 @@ import { ANGULAR_LAB_FEATURES, findLabFeature, LabDifficulty } from './angular-l
   template: `
     @if (feature(); as feature) {
       <tp-page-header
-        eyebrow="Angular Lab Detail"
+        eyebrow="Learning Lab / Angular"
         [title]="feature.name"
         [subtitle]="feature.explanation"
-        actionLabel="Back to Lab"
+        actionLabel="Back to Angular"
         actionIcon="pi pi-arrow-left"
         (action)="backLink.click()"
       />
-      <a #backLink routerLink="/angular-lab" hidden></a>
+      <a #backLink routerLink="/learning/angular" hidden></a>
 
       <section class="detail-grid">
-        <tp-section-card title="Workshop View" subtitle="How this Angular concept appears inside TeamPulse.">
+        <tp-section-card title="Learning View" subtitle="How this Angular concept appears inside TeamPulse.">
           <div class="fact-list">
+            <div>
+              <span>Week</span>
+              <strong>{{ feature.week }}</strong>
+            </div>
+            <div>
+              <span>Category</span>
+              <strong>{{ feature.category }}</strong>
+            </div>
             <div>
               <span>Difficulty</span>
               <p-tag [value]="feature.difficulty" [severity]="difficultySeverity(feature.difficulty)" />
+            </div>
+            <div>
+              <span>Status</span>
+              <p-tag [value]="feature.status" [severity]="statusSeverity(feature.status)" />
             </div>
             <div>
               <span>Pages</span>
@@ -76,6 +88,11 @@ import { ANGULAR_LAB_FEATURES, findLabFeature, LabDifficulty } from './angular-l
             <p-panel header="Why TeamPulse uses it">
               <p>{{ feature.whyTeamPulseUsesIt }}</p>
             </p-panel>
+            @if (feature.statusNotes) {
+              <p-panel header="Status notes">
+                <p>{{ feature.statusNotes }}</p>
+              </p-panel>
+            }
           </p-tabpanel>
 
           <p-tabpanel value="usage">
@@ -126,7 +143,7 @@ import { ANGULAR_LAB_FEATURES, findLabFeature, LabDifficulty } from './angular-l
               @for (link of feature.pageLinks; track link.route) {
                 <a pButton [routerLink]="link.route" icon="pi pi-external-link" [label]="link.label"></a>
               }
-              <a pButton routerLink="/angular-lab" icon="pi pi-list" label="All Lab Entries" severity="secondary"></a>
+              <a pButton routerLink="/learning/angular" icon="pi pi-list" label="All Angular Topics" severity="secondary"></a>
             </div>
           </p-tabpanel>
         </p-tabpanels>
@@ -134,13 +151,13 @@ import { ANGULAR_LAB_FEATURES, findLabFeature, LabDifficulty } from './angular-l
     } @else {
       <tp-empty-state
         icon="pi pi-search"
-        title="Lab feature not found"
-        message="The requested Angular Lab entry does not exist."
-        actionLabel="Back to Angular Lab"
+        title="Learning topic not found"
+        message="The requested Angular learning topic does not exist."
+        actionLabel="Back to Angular"
         actionIcon="pi pi-arrow-left"
         (action)="backLink.click()"
       />
-      <a #backLink routerLink="/angular-lab" hidden></a>
+      <a #backLink routerLink="/learning/angular" hidden></a>
     }
   `,
   styles: [
@@ -222,5 +239,17 @@ export class AngularLabDetailPageComponent {
     }
 
     return difficulty === 'Intermediate' ? 'info' : 'warn';
+  }
+
+  protected statusSeverity(status: LabStatus): 'success' | 'warn' | 'danger' | 'info' | 'secondary' {
+    if (status === 'Implemented') {
+      return 'success';
+    }
+
+    if (status === 'Partially implemented') {
+      return 'info';
+    }
+
+    return status === 'Conceptual' ? 'warn' : 'secondary';
   }
 }

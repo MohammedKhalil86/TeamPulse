@@ -32,6 +32,18 @@ These rules are for Codex, Claude, and other coding agents working on TeamPulse.
 - If code and docs mismatch, update docs or add an explicit TODO note.
 - Update `docs/18-change-log.md` after meaningful changes.
 
+## MCP Server Rules
+
+MCP servers are development-time tools used by AI coding agents during a session. They are not part of the TeamPulse application runtime.
+
+- Do not add runtime AI features to TeamPulse.
+- Do not claim MCP servers are TeamPulse application features.
+- Do not expose credentials, tokens, or private setup in Learning Lab content.
+- MCP content in Learning Lab must remain generic and safe for public learners.
+- Learning Lab covers: Angular CLI MCP, PrimeNG MCP, GitHub MCP Server, Context7, Playwright MCP.
+- For each MCP, content must include: what it is, why it helps, TeamPulse use case, setup idea, example prompt, common mistakes, safety notes, and AI tool comparison (Claude Code, Codex, GitHub Copilot).
+- Always note that TeamPulse users do not need MCPs to use the app.
+
 ## PrimeNG Rules
 
 - Use PrimeNG heavily for business UI.

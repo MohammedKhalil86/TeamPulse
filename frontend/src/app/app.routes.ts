@@ -77,20 +77,36 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/how-teampulse-works/how-teampulse-works-page.component').then(
             (m) => m.HowTeamPulseWorksPageComponent
-          ),
+        ),
         title: 'How TeamPulse Works | TeamPulse'
       },
+      { path: 'learning', pathMatch: 'full', redirectTo: '/learning/angular' },
       {
-        path: 'angular-lab',
+        path: 'learning/angular',
         loadComponent: () =>
           import('./features/angular-lab/angular-lab-page.component').then((m) => m.AngularLabPageComponent),
-        title: 'Angular Lab | TeamPulse'
+        title: 'Learning Lab - Angular | TeamPulse'
       },
       {
-        path: 'angular-lab/:featureId',
+        path: 'learning/angular/:featureId',
         loadComponent: () =>
           import('./features/angular-lab/angular-lab-detail-page.component').then((m) => m.AngularLabDetailPageComponent),
-        title: 'Angular Lab Detail | TeamPulse'
+        title: 'Learning Lab - Angular Detail | TeamPulse'
+      },
+      {
+        path: 'learning/mcp-servers',
+        loadComponent: () => import('./features/learning/mcp-servers-page.component').then((m) => m.McpServersPageComponent),
+        title: 'Learning Lab - MCP Servers | TeamPulse'
+      },
+      {
+        path: 'learning/run-locally',
+        loadComponent: () => import('./features/learning/run-locally-page.component').then((m) => m.RunLocallyPageComponent),
+        title: 'Learning Lab - Run Locally | TeamPulse'
+      },
+      { path: 'angular-lab', pathMatch: 'full', redirectTo: '/learning/angular' },
+      {
+        path: 'angular-lab/:featureId',
+        redirectTo: '/learning/angular/:featureId'
       }
     ]
   },

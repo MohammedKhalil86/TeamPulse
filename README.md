@@ -88,7 +88,9 @@ Team Members:
 - `/evaluations`: evaluation management and personal evaluations.
 - `/feedback`: feedback feed and creation.
 - `/goals`: goal tracking and management.
-- `/angular-lab` and `/angular-lab/:featureId`: Angular concept explorer.
+- `/learning/angular` and `/learning/angular/:featureId`: Angular concept explorer (redirects from `/angular-lab`).
+- `/learning/mcp-servers`: MCP Servers — five development-time AI tools explained.
+- `/learning/run-locally`: Run Locally — local API setup, GitHub Pages build, troubleshooting.
 
 ## Backend Scope
 
@@ -104,7 +106,7 @@ Start with:
 - `docs/05-backend-api.md`
 - `docs/10-angular-feature-to-page-map.md`
 - `docs/11-page-specifications.md`
-- `docs/13-angular-lab.md`
+- `docs/13-learning-lab.md`
 - `docs/19-demo-script.md`
 
 ## Deployment Note
