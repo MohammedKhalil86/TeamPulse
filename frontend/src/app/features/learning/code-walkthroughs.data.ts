@@ -6,6 +6,9 @@ export interface CodeWalkthrough {
   featureIds: string[];
   code: string;
   highlightedLines?: number[];
+  // If set, the walkthrough only appears in the floating help Code tab when the
+  // selected learner level is at or above this value. Omit to show at all levels.
+  minLevel?: 'Beginner' | 'Intermediate' | 'Advanced';
 }
 
 export const CODE_WALKTHROUGHS: CodeWalkthrough[] = [
@@ -235,6 +238,22 @@ protected readonly goals = signal<Goal[]>([]);`
     if (!value) {
       return 'No date';
     }
+
+    const date = value instanceof Date ? value : new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return 'Invalid date';
+    }
+
+    const diffMs = Date.now() - date.getTime();
+    const diffDays = Math.floor(diffMs / 86_400_000);
+
+    if (diffDays <= 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 30) return \`\${diffDays} days ago\`;
+
+    return new Intl.DateTimeFormat('en', {
+      day: '2-digit', month: 'short', year: 'numeric'
+    }).format(date);
   }
 }`
   },

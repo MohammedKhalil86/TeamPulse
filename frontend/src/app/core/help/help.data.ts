@@ -549,10 +549,12 @@ transform(value: string): string {
         code: `protected readonly filteredFeatures = computed(() => {
   const term = this.search().trim().toLowerCase();
   return this.features.filter(f => {
-    const matchesTerm    = !term || f.name.toLowerCase().includes(term);
-    const matchesWeek    = !this.weekFilter()       || f.week === this.weekFilter();
-    const matchesDiff    = !this.difficultyFilter() || f.difficulty === this.difficultyFilter();
-    return matchesTerm && matchesWeek && matchesDiff;
+    const matchesTerm     = !term || f.name.toLowerCase().includes(term);
+    const matchesWeek     = !this.weekFilter()       || f.week === this.weekFilter();
+    const matchesDiff     = !this.difficultyFilter() || f.difficulty === this.difficultyFilter();
+    const matchesCategory = !this.categoryFilter()   || f.category === this.categoryFilter();
+    const matchesStatus   = !this.statusFilter()     || f.status === this.statusFilter();
+    return matchesTerm && matchesWeek && matchesDiff && matchesCategory && matchesStatus;
   });
 });`,
         minLevel: 'Intermediate'

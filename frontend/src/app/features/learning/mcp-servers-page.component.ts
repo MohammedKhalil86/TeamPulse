@@ -64,11 +64,11 @@ const MCP_ENTRIES: McpEntry[] = [
     why:
       'PrimeNG has changed its API significantly across major versions. Without grounded documentation the AI often mixes PrimeNG 16 syntax with PrimeNG 19+. The MCP pins the agent to the exact version you are running.',
     teamPulseUse:
-      'TeamPulse uses PrimeNG 19 throughout — tables, dialogs, tags, sliders, accordions, and charts. When adding a new page, ask the agent to produce the correct `p-table` template with `#header` and `#body` ng-templates rather than the deprecated row-slot syntax.',
+      'TeamPulse uses PrimeNG 21 throughout — tables, dialogs, tags, sliders, accordions, and charts. When adding a new page, ask the agent to produce the correct `p-table` template with `#header` and `#body` ng-templates rather than the deprecated row-slot syntax.',
     setupIdea:
       'Register the PrimeNG MCP in your AI agent configuration. No API key is needed. The server reads the PrimeNG version from your `package.json` automatically.',
     examplePrompt:
-      'Show me a PrimeNG 19 p-table with pagination, a global search input, and a custom #empty template, using the standalone imports array.',
+      'Show me a PrimeNG 21 p-table with pagination, a global search input, and a custom #empty template, using the standalone imports array.',
     commonMistakes: [
       'Asking for PrimeNG examples without specifying the version — the agent may target an older major release.',
       'Mixing PrimeNG free and PrimeNG Pro component APIs in the same prompt.',

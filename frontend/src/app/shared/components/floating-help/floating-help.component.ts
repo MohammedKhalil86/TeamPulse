@@ -501,7 +501,10 @@ export class FloatingHelpComponent {
     return entry.angularFeatures.filter((f) => LEVEL_ORDER[f.minLevel] <= maxOrder);
   });
 
-  protected readonly filteredWalkthroughs = computed(() => this.walkthroughs());
+  protected readonly filteredWalkthroughs = computed(() => {
+    const maxOrder = LEVEL_ORDER[this.learnerLevel()];
+    return this.walkthroughs().filter((w) => w.minLevel === undefined || LEVEL_ORDER[w.minLevel] <= maxOrder);
+  });
 
   protected readonly filteredLegacySnippets = computed(() => {
     const entry = this.entry();

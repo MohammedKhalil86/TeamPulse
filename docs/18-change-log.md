@@ -1,5 +1,14 @@
 # Change Log
 
+## 2026-05-17 - Post-review fixes
+
+Applied targeted fixes from the comprehensive v2 review.
+
+- **MCP Servers page — PrimeNG version:** Corrected both the `teamPulseUse` description and the `examplePrompt` in the PrimeNG MCP entry from "PrimeNG 19" to "PrimeNG 21". The project uses PrimeNG 21.1.6.
+- **Floating help — Code tab walkthrough level filtering:** Added `minLevel?: 'Beginner' | 'Intermediate' | 'Advanced'` to the `CodeWalkthrough` interface. Updated `filteredWalkthroughs` in `FloatingHelpComponent` to honour the selected learner level consistently with `filteredLegacySnippets`. Walkthroughs without `minLevel` continue to appear at all levels.
+- **Pipes walkthrough — incomplete body:** Replaced the stub `transform` function (which ended after the null guard) with the full `FriendlyDatePipe` implementation: Date coercion, NaN guard, Today/Yesterday/days-ago/`Intl.DateTimeFormat` branches. The walkthrough now matches `shared/pipes/friendly-date.pipe.ts` exactly.
+- **Angular Lab help snippet — filter drift:** Updated the inline code snippet for `/learning/angular` in `help.data.ts` to include all five filter predicates (`matchesTerm`, `matchesWeek`, `matchesDiff`, `matchesCategory`, `matchesStatus`), matching the real `AngularLabPageComponent` implementation.
+
 ## 2026-05-17 - README and docs source of truth
 
 - Reworked the README around TeamPulse v2 positioning, MIT license, repository URL, sample-data warning, requirements, Local API setup, GitHub Pages setup, credentials, project structure, Learning Lab pages, troubleshooting, and contribution notes.
